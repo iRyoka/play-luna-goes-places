@@ -1,0 +1,8 @@
+{
+    "version":  "0.3.0",
+    "source_commit":  "52647f74007e48c1acac462360ad6191d3bbb4e4",
+    "public_repository":  "https://github.com/iRyoka/play-luna-goes-places",
+    "play_path":  "./play/0.3.0/",
+    "apk_url":  "https://github.com/iRyoka/play-luna-goes-places/releases/download/0.3.0/luna-goes-places-0.3.0.apk",
+    "custom_domain":  "luna.iryoka.com"
+}
