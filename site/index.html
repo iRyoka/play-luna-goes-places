@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Luna Goes Places — a gentle game for young children.">
+    <meta name="theme-color" content="#73b8d4">
+    <meta property="og:title" content="Luna Goes Places">
+    <meta property="og:description" content="A gentle game for young children.">
+    <meta property="og:type" content="website">
+    <title>Luna Goes Places</title>
+    <link rel="icon" href="assets/luna-app-icon.png" type="image/png">
+    <link rel="stylesheet" href="site.css">
+  </head>
+  <body>
+    <main>
+      <section class="journey" aria-labelledby="site-title">
+        <div class="language-switch" aria-label="Language selector" data-i18n-aria="language_selector">
+          <button type="button" data-language="ru" aria-pressed="false">Русский</button>
+          <button type="button" data-language="en" aria-pressed="true">English</button>
+        </div>
+        <div class="paper-card">
+          <img class="app-icon" src="assets/luna-app-icon.png" width="96" height="96" alt="">
+          <h1 id="site-title" data-i18n="site_title">Luna Goes Places</h1>
+          <div class="actions" aria-label="Play and download" data-i18n-aria="actions_label">
+            <a id="play-link" class="button button-primary" href="play/" data-i18n="play">Play in browser</a>
+            <a id="apk-link" class="button button-secondary" href="#download" aria-describedby="download-note" data-i18n="download">Download APK</a>
+          </div>
+          <p id="download-note" class="version-note"><span data-i18n="version">Version</span> <span id="release-version">loading</span></p>
+        </div>
+      </section>
+
+      <section class="grown-ups" aria-labelledby="grown-ups-title">
+        <div>
+          <p class="eyebrow" data-i18n="quiet_corner">A quiet corner</p>
+          <h2 id="grown-ups-title" data-i18n="grown_ups">For grown-ups</h2>
+        </div>
+        <nav aria-label="Grown-ups links" data-i18n-aria="grown_ups_links">
+          <a class="issues-link" href="https://github.com/iRyoka/play-luna-goes-places/issues/new" target="_blank" rel="noopener" data-i18n="issues_link">GitHub Issues</a>
+          <a href="#feedback" data-i18n="feedback_link">Feedback form</a>
+          <a id="source-link" href="#source" data-i18n="source">Source</a>
+          <a id="license-link" href="#license" data-i18n="license">License &amp; notices</a>
+        </nav>
+      </section>
+
+      <section class="feedback" aria-labelledby="feedback-title">
+        <div class="paper-note">
+          <h2 id="feedback-title" data-i18n="feedback_title">Feedback for grown-ups</h2>
+          <p class="issues-intro" data-i18n="issues_intro">Know GitHub? Please report a problem or suggest an idea in GitHub Issues — it is the main feedback channel. GitHub Issues are public; please don’t share a child’s name, photo, location, or other identifying information.</p>
+          <a class="button button-primary issues-button" href="https://github.com/iRyoka/play-luna-goes-places/issues/new" target="_blank" rel="noopener" data-i18n="issues_button">Open GitHub Issues</a>
+          <p data-i18n="form_intro">If GitHub is not convenient, you can write to us here.</p>
+          <p data-i18n="privacy">Formspree and Luna Goes Places receive the name, email address, and feedback you submit. Please don’t share a child’s name, photo, location, or other identifying information.</p>
+          <form action="https://formspree.io/f/mqpaawpr" method="POST">
+            <label for="feedback-name" data-i18n="name_label">Your name</label>
+            <input id="feedback-name" name="name" type="text" maxlength="100" autocomplete="name">
+            <label for="feedback-email" data-i18n="email_label">Email address</label>
+            <input id="feedback-email" name="email" type="email" maxlength="254" autocomplete="email" required>
+            <label for="feedback-message" data-i18n="message_label">Feedback</label>
+            <textarea id="feedback-message" name="message" rows="6" maxlength="2000" required></textarea>
+            <button class="button button-feedback" type="submit" data-i18n="send">Send feedback</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>Luna Goes Places <span aria-hidden="true">·</span> <span id="footer-version">loading</span></p>
+    </footer>
+    <script src="site-config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

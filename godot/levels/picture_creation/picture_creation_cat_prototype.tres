@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PictureCreationConfiguration" format=3 uid="uid://bj2ebviqmvy5q"]
+
+[ext_resource type="Script" uid="uid://b1nq6svcpxeox" path="res://levels/picture_creation/picture_creation_configuration.gd" id="1_configuration"]
+[ext_resource type="Script" uid="uid://cspe3ngppxmcr" path="res://levels/picture_creation/picture_trace_stage.gd" id="2_trace"]
+[ext_resource type="Script" uid="uid://c121y25bw2say" path="res://levels/picture_creation/picture_color_region.gd" id="3_region"]
+
+[sub_resource type="Resource" id="HeadRegion"]
+script = ExtResource("3_region")
+id = &"head"
+polygon = PackedVector2Array(730, 530, 700, 410, 734, 168, 900, 278, 980, 210, 1100, 278, 1210, 190, 1180, 410, 1100, 520, 920, 560)
+
+[sub_resource type="Resource" id="BodyRegion"]
+script = ExtResource("3_region")
+id = &"body"
+polygon = PackedVector2Array(1100, 700, 1200, 660, 1380, 670, 1510, 750, 1530, 850, 1470, 930, 1330, 970, 1170, 930, 1080, 840)
+
+[sub_resource type="Resource" id="BowtieRegion"]
+script = ExtResource("3_region")
+id = &"bowtie"
+polygon = PackedVector2Array(952, 606, 1050, 552, 1148, 606, 1050, 662)
+
+[sub_resource type="Resource" id="PawRegion"]
+script = ExtResource("3_region")
+id = &"paw"
+polygon = PackedVector2Array(1610, 850, 1670, 800, 1730, 850, 1740, 910, 1675, 950, 1615, 915)
+
+[sub_resource type="Resource" id="TraceEar"]
+script = ExtResource("2_trace")
+id = &"ear"
+points = PackedVector2Array(780, 354, 750, 300, 734, 240, 734, 168, 790, 205, 845, 240, 900, 278)
+focus_center = Vector2(810, 260)
+
+[sub_resource type="Resource" id="TraceBowtie"]
+script = ExtResource("2_trace")
+id = &"bowtie"
+points = PackedVector2Array(952, 606, 990, 580, 1050, 552, 1105, 580, 1148, 606, 1105, 635, 1050, 662, 990, 635)
+cue_mode = 1
+focus_center = Vector2(1050, 607)
+close_outline_after_last_dot = true
+
+[sub_resource type="Resource" id="TracePaw"]
+script = ExtResource("2_trace")
+id = &"paw"
+points = PackedVector2Array(1610, 850, 1670, 800, 1730, 850, 1740, 910, 1675, 950, 1615, 915)
+cue_mode = 2
+focus_center = Vector2(1670, 850)
+requires_origin_completion = true
+
+[resource]
+script = ExtResource("1_configuration")
+trace_stages = Array[ExtResource("2_trace")]([SubResource("TraceEar"), SubResource("TraceBowtie"), SubResource("TracePaw")])
+color_regions = Array[ExtResource("3_region")]([SubResource("HeadRegion"), SubResource("BodyRegion"), SubResource("BowtieRegion"), SubResource("PawRegion")])
+palette = PackedColorArray(0.937255, 0.435294, 0.423529, 1, 0.964706, 0.741176, 0.376471, 1, 0.517647, 0.647059, 0.615686, 1, 0.427451, 0.615686, 0.772549, 1, 0.705882, 0.556863, 0.678431, 1)

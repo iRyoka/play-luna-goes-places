@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://3514bf53rgvt"]
+
+[ext_resource type="Texture2D" uid="uid://dthbjmdbuhy12" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-backing-sliced.png" id="1_backing"]
+[ext_resource type="Texture2D" uid="uid://c1htkqb76c25v" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-left-wall-sliced.png" id="2_left_wall"]
+[ext_resource type="Texture2D" uid="uid://dw04827m87fbr" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-right-wall-sliced.png" id="3_right_wall"]
+[ext_resource type="Texture2D" uid="uid://dn7shxcyomwk7" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-roof-sliced.png" id="4_roof"]
+[ext_resource type="Texture2D" uid="uid://ck11vbhlwtvab" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-door-sliced.png" id="5_door"]
+[ext_resource type="Texture2D" uid="uid://dtrsfi6aaw1fr" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-sheep-sliced.png" id="6_sheep"]
+[ext_resource type="Texture2D" uid="uid://wygdfkn56xqy" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-jar-sliced.png" id="7_jar"]
+
+[node name="KakhetiBarnLayout" type="Control" unique_id=183383935]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 2160.0
+offset_bottom = 1080.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=873305963]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.952941, 0.905882, 0.823529, 1)
+
+[node name="AssemblyPieces" type="Node2D" parent="." unique_id=869694045]
+
+[node name="Backing" type="Sprite2D" parent="AssemblyPieces" unique_id=1467838776]
+texture_filter = 4
+position = Vector2(1085, 476)
+texture = ExtResource("1_backing")
+
+[node name="LeftWall" type="Sprite2D" parent="AssemblyPieces" unique_id=373288345]
+z_index = 1
+texture_filter = 4
+position = Vector2(759, 641)
+texture = ExtResource("2_left_wall")
+
+[node name="RightWall" type="Sprite2D" parent="AssemblyPieces" unique_id=704415135]
+z_index = 1
+texture_filter = 4
+position = Vector2(1396, 628.00006)
+scale = Vector2(1, 1.11)
+texture = ExtResource("3_right_wall")
+
+[node name="Roof" type="Sprite2D" parent="AssemblyPieces" unique_id=132833680]
+z_index = 2
+texture_filter = 4
+position = Vector2(1080, 300)
+texture = ExtResource("4_roof")
+
+[node name="Door" type="Sprite2D" parent="AssemblyPieces" unique_id=287670191]
+z_index = 3
+texture_filter = 4
+position = Vector2(1078, 740)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("5_door")
+
+[node name="Sheep" type="Sprite2D" parent="AssemblyPieces" unique_id=1711267178]
+z_index = 4
+texture_filter = 4
+position = Vector2(1075, 490.99997)
+scale = Vector2(0.85, 0.85)
+texture = ExtResource("6_sheep")
+
+[node name="Jar" type="Sprite2D" parent="AssemblyPieces" unique_id=85760337]
+z_index = 5
+texture_filter = 4
+position = Vector2(1456, 757)
+texture = ExtResource("7_jar")

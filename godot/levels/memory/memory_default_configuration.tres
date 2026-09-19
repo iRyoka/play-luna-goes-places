@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MemoryConfiguration" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_configuration.gd" id="1_configuration"]
+
+[resource]
+script = ExtResource("1_configuration")
+rows = 3
+columns = 4
+random_pair_pool = [&"cat", &"grapes", &"flower", &"bird", &"bread", &"tower", &"butterfly", &"pomegranate"]
+select_pairs_randomly = true

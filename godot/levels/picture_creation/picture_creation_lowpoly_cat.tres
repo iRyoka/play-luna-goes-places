@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="PictureCreationConfiguration" format=3]
+
+[ext_resource type="Script" path="res://levels/picture_creation/picture_creation_configuration.gd" id="1_configuration"]
+[ext_resource type="Script" path="res://levels/picture_creation/picture_trace_stage.gd" id="2_trace"]
+[ext_resource type="Script" path="res://levels/picture_creation/picture_color_region.gd" id="3_region"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/picture-nook-background.png" id="6_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/lowpoly-cat/cat_lowpoly_runtime_outline.svg" id="4_outline"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/lowpoly-cat/cat_lowpoly_coloring_outline.svg" id="5_coloring_outline"]
+[sub_resource type="Resource" id="Region0"]
+script = ExtResource("3_region")
+id = &"candidate_1"
+polygon = PackedVector2Array(1119.375, 508.875, 1158.375, 572.375, 1159.625, 586.625, 1167.656, 658.406, 1102.500, 655.875, 1167.656, 658.406, 1167.750, 694.5, 1099.875, 670.875, 1167.750, 694.5, 1136.250, 718.688, 1096.875, 688.875, 1136.250, 718.688, 1086.375, 746.625, 1039.215, 759.75, 932.625, 770.16, 902.125, 764.375, 856.250, 752, 756.375, 684.562, 740.812, 655.312, 785.625, 639.375, 740.812, 655.312, 724.406, 621.094, 790.500, 621.375, 724.406, 621.094, 732.188, 589.5, 790.125, 610.5, 732.188, 589.5, 777.500, 509, 820.125, 468.375, 777.500, 509, 764.715, 457.688, 794.250, 298.125, 877.875, 373.312, 911.625, 420.25, 871.125, 450, 911.625, 420.25, 948.750, 427.125, 963.750, 510, 1012.625, 439.125, 1024.625, 440.875, 1029.188, 499.125, 1063.625, 456.625, 1089.750, 477.375, 1063.625, 456.625, 1058.875, 445.5, 1128.090, 389.16, 1194.000, 350.625, 1201.965, 463.965, 1195.965, 517.59, 1170.375, 565.125, 1158.375, 572.375)
+
+[sub_resource type="Resource" id="Region1"]
+script = ExtResource("3_region")
+id = &"candidate_2"
+polygon = PackedVector2Array(1411.875, 840.375, 1370.250, 841.5, 1378.410, 806.625, 1368.090, 791.34, 1328.625, 780.25, 1307.375, 755.875, 1286.250, 707.438, 1289.625, 656.25, 1286.250, 707.438, 1307.375, 755.875, 1204.000, 828.875, 1137.250, 850, 1150.215, 813.375, 1150.500, 765, 1150.215, 813.375, 1137.250, 850, 1014.375, 950.25, 984.750, 953.5, 991.500, 906.375, 984.750, 953.5, 938.875, 950.75, 954.375, 902.625, 938.875, 950.75, 917.250, 939.66, 911.535, 911.25, 934.215, 880.5, 979.750, 867.625, 1015.500, 876, 979.750, 867.625, 995.000, 841.25, 1088.250, 758.625, 995.000, 841.25, 945.000, 821.875, 902.125, 764.375, 932.625, 770.16, 1039.215, 759.75, 1086.375, 746.625, 1136.250, 718.688, 1158.000, 741.375, 1136.250, 718.688, 1167.750, 694.5, 1199.625, 712.5, 1167.750, 694.5, 1167.656, 658.406, 1210.875, 661.5, 1167.656, 658.406, 1159.625, 586.625, 1230.562, 630, 1205.125, 552.25, 1232.875, 536.5, 1305.562, 597, 1287.625, 506.875, 1308.000, 494.812, 1345.875, 496.125, 1383.625, 505.375, 1427.715, 598.035, 1435.215, 646.125, 1427.910, 684.375, 1437.285, 718.41, 1463.340, 748.215, 1467.938, 796.875, 1451.062, 864.375, 1431.090, 901.785, 1396.125, 912.625, 1401.000, 873.375, 1396.125, 912.625, 1360.125, 909.375, 1366.875, 872.25, 1360.125, 909.375, 1345.785, 906, 1335.938, 882.375, 1349.160, 853.5, 1370.250, 841.5)
+
+[sub_resource type="Resource" id="Region2"]
+script = ExtResource("3_region")
+id = &"candidate_3"
+polygon = PackedVector2Array(1377.000, 373.5, 1353.938, 334.312, 1321.688, 304.688, 1287.938, 257.812, 1265.812, 219.09, 1266.562, 193.785, 1282.688, 168.84, 1358.812, 137.25, 1388.250, 140.438, 1408.312, 169.5, 1368.000, 209.812, 1392.938, 247.312, 1421.062, 287.812, 1450.688, 333.188, 1447.875, 351.938, 1432.965, 423.562, 1416.938, 461.812, 1383.625, 505.375, 1345.875, 496.125, 1376.160, 418.59)
+
+[sub_resource type="Resource" id="Region3"]
+script = ExtResource("3_region")
+id = &"candidate_4"
+polygon = PackedVector2Array(772.125, 894.375, 762.875, 932.125, 721.750, 927.75, 738.000, 890.25, 721.750, 927.75, 704.062, 907.5, 713.535, 872.25, 742.785, 855.562, 781.000, 849.375, 800.250, 874.875, 781.000, 849.375, 856.250, 752, 902.125, 764.375, 945.000, 821.875, 793.500, 926.625, 762.875, 932.125)
+
+[sub_resource type="Resource" id="Region4"]
+script = ExtResource("3_region")
+id = &"candidate_5"
+polygon = PackedVector2Array(1307.375, 755.875, 1328.625, 780.25, 1261.410, 865.785, 1241.750, 871, 1239.375, 846, 1241.750, 871, 1206.375, 870.66, 1204.000, 828.875)
+
+[sub_resource type="Resource" id="Region5"]
+script = ExtResource("3_region")
+id = &"candidate_6"
+polygon = PackedVector2Array(934.125, 701.25, 939.797, 657.609, 974.875, 668.375, 958.215, 714.66, 932.062, 733.875, 911.250, 715.125, 904.312, 675.562, 895.875, 652.625, 939.797, 657.609)
+
+[sub_resource type="Resource" id="Region6"]
+script = ExtResource("3_region")
+id = &"candidate_7"
+polygon = PackedVector2Array(1167.562, 397.5, 1159.688, 511.5, 1113.938, 473.25, 1115.910, 444.75)
+
+[sub_resource type="Resource" id="Region7"]
+script = ExtResource("3_region")
+id = &"candidate_8"
+polygon = PackedVector2Array(812.250, 353.625, 852.000, 411.84, 847.125, 438.75, 811.125, 453.75, 797.812, 434.34)
+
+[sub_resource type="Resource" id="Region8"]
+script = ExtResource("3_region")
+id = &"candidate_9"
+polygon = PackedVector2Array(1305.562, 597, 1232.875, 536.5, 1287.625, 506.875)
+
+[sub_resource type="Resource" id="Region9"]
+script = ExtResource("3_region")
+id = &"candidate_10"
+polygon = PackedVector2Array(1158.375, 572.375, 1170.375, 565.125, 1205.125, 552.25, 1230.562, 630, 1159.625, 586.625)
+
+[sub_resource type="Resource" id="Region10"]
+script = ExtResource("3_region")
+id = &"candidate_11"
+polygon = PackedVector2Array(963.750, 510, 948.750, 427.125, 1012.625, 439.125)
+
+[sub_resource type="Resource" id="Region11"]
+script = ExtResource("3_region")
+id = &"candidate_12"
+polygon = PackedVector2Array(1063.625, 456.625, 1029.188, 499.125, 1024.625, 440.875, 1058.875, 445.5)
+
+[sub_resource type="Resource" id="Region12"]
+script = ExtResource("3_region")
+id = &"candidate_13"
+polygon = PackedVector2Array(940.067, 639.17, 932.250, 623.625, 927.750, 614.625, 922.875, 597.375, 975.750, 609, 957.000, 620.25, 948.750, 626.625)
+
+[sub_resource type="Resource" id="Trace0"]
+script = ExtResource("2_trace")
+id = &"paw"
+points = PackedVector2Array(1411.875, 840.375, 1370.250, 841.5, 1349.160, 853.5, 1335.938, 882.375, 1360.125, 909.375, 1396.125, 912.625, 1431.090, 901.785, 1451.062, 864.375)
+cue_mode = 0
+focus_center = Vector2(1383.490, 879.101)
+deferred_reveal_segments = [PackedVector2Array(1401.000, 873.375, 1396.125, 912.625), PackedVector2Array(1366.875, 872.25, 1360.125, 909.375)]
+
+[sub_resource type="Resource" id="Trace1"]
+script = ExtResource("2_trace")
+id = &"tongue"
+points = PackedVector2Array(895.875, 652.625, 939.797, 657.609, 974.875, 668.375, 958.215, 714.66, 932.062, 733.875, 911.250, 715.125, 904.312, 675.562)
+cue_mode = 1
+focus_center = Vector2(930.912, 688.262)
+close_outline_after_last_dot = true
+deferred_reveal_segments = [PackedVector2Array(934.125, 701.25, 939.797, 657.609)]
+
+[sub_resource type="Resource" id="Trace2"]
+script = ExtResource("2_trace")
+id = &"ear"
+points = PackedVector2Array(797.812, 434.34, 811.125, 453.75, 847.125, 438.75, 852.000, 411.84, 812.250, 353.625)
+cue_mode = 2
+focus_center = Vector2(824.062, 418.461)
+requires_origin_completion = true
+
+[resource]
+script = ExtResource("1_configuration")
+reference_size = Vector2(2160, 1080)
+background_art = ExtResource("6_background")
+outline_art = ExtResource("4_outline")
+coloring_outline_art = ExtResource("5_coloring_outline")
+trace_stages = Array[ExtResource("2_trace")]([SubResource("Trace0"), SubResource("Trace1"), SubResource("Trace2")])
+color_regions = Array[ExtResource("3_region")]([SubResource("Region0"), SubResource("Region1"), SubResource("Region2"), SubResource("Region3"), SubResource("Region4"), SubResource("Region5"), SubResource("Region6"), SubResource("Region7"), SubResource("Region8"), SubResource("Region9"), SubResource("Region10"), SubResource("Region11"), SubResource("Region12")])
+palette = PackedColorArray(0.956863, 0.772549, 0.258824, 1, 0.941176, 0.541176, 0.235294, 1, 0.85098, 0.32549, 0.309804, 1, 0.905882, 0.478431, 0.623529, 1, 0.435294, 0.639216, 0.356863, 1, 0.298039, 0.603922, 0.572549, 1, 0.435294, 0.658824, 0.839216, 1, 0.486275, 0.352941, 0.54902, 1)
+paper_field_color = Color(0.952941, 0.886275, 0.788235, 0)
+trace_fade_color = Color(0.952941, 0.886275, 0.788235, 0.84)
+palette_origin = Vector2(1765, 249)
+palette_spacing = Vector2(150, 200)
+palette_columns = 2
+palette_swatch_radius = 47.0
+palette_selected_radius = 47.0
+palette_touch_radius = 70.0

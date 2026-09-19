@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="TrailCourse" format=3]
+
+[ext_resource type="Script" path="res://levels/trail/trail_course.gd" id="1_course"]
+[ext_resource type="Script" path="res://levels/trail/trail_stage.gd" id="2_stage"]
+[ext_resource type="Script" path="res://levels/trail/trail_segment.gd" id="3_segment"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/background.png" id="4_meadow_bg"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/actor-bee-0.png" id="5_bee_0"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/actor-bee-1.png" id="6_bee_1"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/actor-bee-2.png" id="7_bee_2"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/marker-flower-checkpoint.png" id="8_flower_checkpoint"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/meadow/marker-flower-goal.png" id="9_flower_goal"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/background.png" id="10_stream_bg"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/corridor-span-a.png" id="11_span_a"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/corridor-span-b.png" id="12_span_b"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/corridor-span-c.png" id="13_span_c"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/marker-leaf-a.png" id="14_leaf_a"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/marker-leaf-b.png" id="15_leaf_b"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/actor-ant-0.png" id="16_ant_0"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/actor-ant-1.png" id="17_ant_1"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/actor-ant-2.png" id="18_ant_2"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/trail/stream/marker-berry.png" id="19_berry"]
+
+[sub_resource type="Resource" id="Segment_meadow_straight"]
+script = ExtResource("3_segment")
+end_marker_radius = 80.0
+points = PackedVector2Array(420, 820, 1120, 820)
+path_width = 260.0
+smooth = false
+
+[sub_resource type="Resource" id="Segment_meadow_curve"]
+script = ExtResource("3_segment")
+end_marker_radius = 80.0
+points = PackedVector2Array(1120, 820, 1460, 800, 1700, 660, 1780, 440)
+
+[sub_resource type="Resource" id="Segment_meadow_s_curve"]
+script = ExtResource("3_segment")
+end_marker_texture = ExtResource("9_flower_goal")
+end_marker_radius = 130.0
+points = PackedVector2Array(1780, 440, 1520, 250, 1180, 520, 880, 260, 620, 430)
+
+[sub_resource type="Resource" id="Stage_bee_meadow"]
+script = ExtResource("2_stage")
+segments = Array[ExtResource("3_segment")]([SubResource("Segment_meadow_straight"), SubResource("Segment_meadow_curve"), SubResource("Segment_meadow_s_curve")])
+containment = 1
+actor_frames = Array[Texture2D]([ExtResource("5_bee_0"), ExtResource("6_bee_1"), ExtResource("7_bee_2")])
+actor_draw_radius = 85.0
+actor_art_facing_degrees = 90.0
+background = ExtResource("4_meadow_bg")
+checkpoint_marker_texture = ExtResource("8_flower_checkpoint")
+
+[sub_resource type="Resource" id="Segment_stream_first_straw"]
+script = ExtResource("3_segment")
+corridor_texture = ExtResource("11_span_a")
+end_marker_radius = 110.0
+points = PackedVector2Array(350, 470, 900, 400)
+path_width = 130.0
+smooth = false
+
+[sub_resource type="Resource" id="Segment_stream_second_straw"]
+script = ExtResource("3_segment")
+corridor_texture = ExtResource("12_span_b")
+end_marker_texture = ExtResource("15_leaf_b")
+end_marker_radius = 110.0
+points = PackedVector2Array(900, 400, 1360, 620)
+path_width = 125.0
+smooth = false
+
+[sub_resource type="Resource" id="Segment_stream_last_straw"]
+script = ExtResource("3_segment")
+corridor_texture = ExtResource("13_span_c")
+end_marker_texture = ExtResource("19_berry")
+end_marker_radius = 90.0
+points = PackedVector2Array(1360, 620, 1830, 520)
+path_width = 120.0
+smooth = false
+
+[sub_resource type="Resource" id="Stage_ant_stream"]
+script = ExtResource("2_stage")
+segments = Array[ExtResource("3_segment")]([SubResource("Segment_stream_first_straw"), SubResource("Segment_stream_second_straw"), SubResource("Segment_stream_last_straw")])
+containment = 2
+actor_frames = Array[Texture2D]([ExtResource("16_ant_0"), ExtResource("17_ant_1"), ExtResource("18_ant_2")])
+actor_radius = 38.0
+actor_draw_radius = 70.0
+background = ExtResource("10_stream_bg")
+checkpoint_marker_texture = ExtResource("14_leaf_a")
+
+[resource]
+script = ExtResource("1_course")
+stages = Array[ExtResource("2_stage")]([SubResource("Stage_bee_meadow"), SubResource("Stage_ant_stream")])

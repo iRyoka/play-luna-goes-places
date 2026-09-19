@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://30lb6kio1blj"]
+
+[ext_resource type="Texture2D" uid="uid://2yawr1gtmqoh" path="res://assets/environments/chapter-02/map/chapter-background.png" id="1_background"]
+[ext_resource type="Texture2D" uid="uid://2p6x1tp1dihy" path="res://assets/ui/map-level-buttons/level-button-available.png" id="2_marker"]
+
+[node name="Chapter02MarkerLayout" type="Node2D" unique_id=1711856847]
+
+[node name="Backdrop" type="Sprite2D" parent="." unique_id=1933944329]
+position = Vector2(1080, 540)
+texture = ExtResource("1_background")
+
+[node name="MeadowPath" type="Sprite2D" parent="." unique_id=82387662]
+z_index = 1
+position = Vector2(488.00006, 893)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="PictureNook" type="Sprite2D" parent="." unique_id=1039310979]
+z_index = 1
+position = Vector2(777, 413)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="MountainFalls" type="Sprite2D" parent="." unique_id=978110746]
+z_index = 1
+position = Vector2(108.000015, 646.99994)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="BambooGrove" type="Sprite2D" parent="." unique_id=299323224]
+z_index = 1
+position = Vector2(541, 611)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="GrandTree" type="Sprite2D" parent="." unique_id=133958398]
+z_index = 1
+position = Vector2(1105, 356)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="LakeFlamingos" type="Sprite2D" parent="." unique_id=1881130648]
+z_index = 1
+position = Vector2(1455, 650)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="GardenPavilion" type="Sprite2D" parent="." unique_id=113695343]
+z_index = 1
+position = Vector2(971, 777)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="CityRail" type="Sprite2D" parent="." unique_id=707463869]
+z_index = 1
+position = Vector2(1425, 310)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="FerrisWheel" type="Sprite2D" parent="." unique_id=556240251]
+z_index = 1
+position = Vector2(1816, 720)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")
+
+[node name="Lighthouse" type="Sprite2D" parent="." unique_id=200159120]
+z_index = 1
+position = Vector2(1531, 976)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_marker")

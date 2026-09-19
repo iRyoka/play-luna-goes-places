@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://app/app.gd" id="1_app"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/map_childrens_march.ogg" id="2_map_music"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/gameplay_activity.wav" id="3_gameplay_music"]
+[ext_resource type="Script" path="res://shared/audio/sfx_player.gd" id="4_sfx"]
+
+[node name="App" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_app")
+
+[node name="Content" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MapMusic" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_map_music")
+volume_db = -18.0
+bus = &"Music"
+
+[node name="GameplayMusic" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_gameplay_music")
+volume_db = -18.0
+bus = &"Music"
+
+[node name="SfxPlayer" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_sfx")
+
+[node name="PlayerA" type="AudioStreamPlayer" parent="SfxPlayer"]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="PlayerB" type="AudioStreamPlayer" parent="SfxPlayer"]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="PlayerC" type="AudioStreamPlayer" parent="SfxPlayer"]
+unique_name_in_owner = true
+bus = &"SFX"

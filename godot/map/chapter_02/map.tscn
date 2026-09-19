@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://mw4q50twy7xv"]
+
+[ext_resource type="Script" uid="uid://b1o07nqlgp8n7" path="res://map/chapter_map.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://d0b1udg8ucg7o" path="res://map/chapter_02/backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" uid="uid://dmhlccov4pg5l" path="res://app/settings_button.gd" id="3_settings"]
+[ext_resource type="Texture2D" uid="uid://drpn0ada7y5g1" path="res://assets/characters/luna/map-indicators/luna-map-indicator-hanging.png" id="4_hanging"]
+[ext_resource type="Texture2D" uid="uid://duf2f87rmmb7t" path="res://assets/characters/luna/map-indicators/luna-map-indicator-standing.png" id="5_standing"]
+[ext_resource type="Texture2D" uid="uid://xh17pm6lb4so" path="res://assets/characters/luna/map-indicators/luna-map-indicator-peeking.png" id="6_peeking"]
+[ext_resource type="Script" uid="uid://dhy5ojnybg6em" path="res://map/chapter_02/ambient.gd" id="7_ambient"]
+[ext_resource type="Script" uid="uid://ciio2cxc6hobm" path="res://map/chapter_02/ferris_wheel_ambient.gd" id="8_ferris"]
+[ext_resource type="Texture2D" uid="uid://c0gcn82rpxqqj" path="res://assets/environments/chapter-02/map/flamingo-tall.png" id="9_tall_flamingo"]
+[ext_resource type="Texture2D" uid="uid://dauvxukr1yu3h" path="res://assets/environments/chapter-02/map/flamingo-short.png" id="10_short_flamingo"]
+[ext_resource type="Texture2D" uid="uid://gr4xtafh6okf" path="res://assets/environments/chapter-02/map/ferris-wheel-base.png" id="11_ferris_base"]
+[ext_resource type="Texture2D" uid="uid://crloapx6amkj5" path="res://assets/environments/chapter-02/map/ferris-wheel-wheel.png" id="12_ferris_wheel"]
+[ext_resource type="Texture2D" uid="uid://tvmx5ckouaty" path="res://assets/environments/chapter-02/map/ferris-wheel-cart-mustard.png" id="13_mustard_cart"]
+[ext_resource type="Texture2D" uid="uid://b77ndik6rlnxj" path="res://assets/environments/chapter-02/map/ferris-wheel-cart-coral.png" id="14_coral_cart"]
+
+[node name="ChapterMap" type="Control" unique_id=1055435874]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_map")
+chapter_id = &"chapter_02"
+marker_slots = {
+&"BambooGrove": Vector2(0.250463, 0.565741),
+&"CityRail": Vector2(0.659722, 0.287037),
+&"FerrisWheel": Vector2(0.840741, 0.666667),
+&"GardenPavilion": Vector2(0.449537, 0.719444),
+&"GrandTree": Vector2(0.511574, 0.32963),
+&"LakeFlamingos": Vector2(0.673611, 0.601852),
+&"Lighthouse": Vector2(0.708796, 0.903704),
+&"MeadowPath": Vector2(0.225926, 0.826852),
+&"MountainFalls": Vector2(0.05, 0.599074),
+&"PictureNook": Vector2(0.359722, 0.382407)
+}
+
+[node name="PlaceholderBackdrop" type="Control" parent="." unique_id=1276420362]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_backdrop")
+
+[node name="Ambient" type="Node2D" parent="." unique_id=1050843790]
+z_index = 1
+script = ExtResource("7_ambient")
+
+[node name="TallFlamingoPivot" type="Node2D" parent="Ambient"]
+position = Vector2(966, 606.7)
+
+[node name="TallFlamingo" type="Sprite2D" parent="Ambient/TallFlamingoPivot" unique_id=212139490]
+position = Vector2(0, -51.7)
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("9_tall_flamingo")
+
+[node name="ShortFlamingoPivot" type="Node2D" parent="Ambient"]
+position = Vector2(1068, 632.7)
+
+[node name="ShortFlamingo" type="Sprite2D" parent="Ambient/ShortFlamingoPivot" unique_id=1271794269]
+position = Vector2(0, -38.7)
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("10_short_flamingo")
+
+[node name="FerrisWheel" type="Node2D" parent="Ambient" unique_id=1994029955]
+position = Vector2(1927, 342)
+script = ExtResource("8_ferris")
+
+[node name="Base" type="Sprite2D" parent="Ambient/FerrisWheel" unique_id=1839504899]
+position = Vector2(2, 27.999998)
+scale = Vector2(0.23, 0.19)
+texture = ExtResource("11_ferris_base")
+
+[node name="Wheel" type="Sprite2D" parent="Ambient/FerrisWheel" unique_id=1534821327]
+position = Vector2(2, -20)
+scale = Vector2(0.25, 0.23)
+texture = ExtResource("12_ferris_wheel")
+
+[node name="Cart01" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart02" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Cart03" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart04" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Cart05" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart06" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Cart07" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart08" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Cart09" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart10" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Cart11" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("13_mustard_cart")
+
+[node name="Cart12" type="Sprite2D" parent="Ambient/FerrisWheel"]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("14_coral_cart")
+
+[node name="Landmarks" type="Node2D" parent="." unique_id=1770323025]
+
+[node name="LunaIndicatorHanging" type="Sprite2D" parent="Landmarks" unique_id=174046293]
+z_index = 1
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("4_hanging")
+
+[node name="LunaIndicatorStanding" type="Sprite2D" parent="Landmarks" unique_id=1522165081]
+z_index = 1
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("5_standing")
+
+[node name="LunaIndicatorPeeking" type="Sprite2D" parent="Landmarks" unique_id=1941615342]
+z_index = 1
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("6_peeking")
+
+[node name="SettingsButton" type="Button" parent="." unique_id=781337517]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 64.0
+offset_right = -64.0
+offset_bottom = 244.0
+grow_horizontal = 0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+script = ExtResource("3_settings")

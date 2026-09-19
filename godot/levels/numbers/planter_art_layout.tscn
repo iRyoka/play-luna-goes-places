@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://mm2nikhqqp0k"]
+
+[ext_resource type="Texture2D" uid="uid://df0iedh7t02w0" path="res://assets/gameplay/numbers/planter/empty-planter.png" id="1_planter"]
+[ext_resource type="Texture2D" uid="uid://ckv5vsoheess3" path="res://assets/gameplay/numbers/planter/flower-01.png" id="2_flower_01"]
+[ext_resource type="Texture2D" uid="uid://duieb31wxlmuo" path="res://assets/gameplay/numbers/planter/flower-02.png" id="3_flower_02"]
+[ext_resource type="Texture2D" uid="uid://bo2ru3mimcqq6" path="res://assets/gameplay/numbers/planter/flower-03.png" id="4_flower_03"]
+[ext_resource type="Texture2D" uid="uid://cyxvyfxhve04q" path="res://assets/gameplay/numbers/planter/flower-04.png" id="5_flower_04"]
+[ext_resource type="Texture2D" uid="uid://b1ubsr43hgb7m" path="res://assets/gameplay/numbers/planter/flower-05.png" id="6_flower_05"]
+[ext_resource type="Texture2D" uid="uid://bnuf3p0bb3vb7" path="res://assets/gameplay/numbers/planter/flower-06.png" id="7_flower_06"]
+[ext_resource type="Texture2D" uid="uid://rb75f8xokvc6" path="res://assets/gameplay/numbers/planter/flower-07.png" id="8_flower_07"]
+[ext_resource type="Texture2D" uid="uid://b3hq80b5tchai" path="res://assets/gameplay/numbers/planter/flower-08.png" id="9_flower_08"]
+[ext_resource type="Texture2D" uid="uid://eepxqnh5pdil" path="res://assets/gameplay/numbers/planter/flower-09.png" id="10_flower_09"]
+[ext_resource type="Texture2D" uid="uid://cg5bmid60dpyw" path="res://assets/gameplay/numbers/planter/flower-10.png" id="11_flower_10"]
+
+[node name="PlanterArtLayout" type="Node2D" unique_id=368266330]
+
+[node name="Planter" type="Sprite2D" parent="." unique_id=564037424]
+position = Vector2(768, 550)
+texture = ExtResource("1_planter")
+
+[node name="Flowers" type="Node2D" parent="." unique_id=208851596]
+
+[node name="Flower01_TopLeft" type="Sprite2D" parent="Flowers" unique_id=1947082798]
+position = Vector2(264, 387.00003)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_flower_01")
+
+[node name="Flower02_TopSecond" type="Sprite2D" parent="Flowers" unique_id=1395220352]
+position = Vector2(510, 386.99997)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("3_flower_02")
+
+[node name="Flower03_TopMiddle" type="Sprite2D" parent="Flowers" unique_id=20596085]
+position = Vector2(763, 387)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("4_flower_03")
+
+[node name="Flower04_TopFourth" type="Sprite2D" parent="Flowers" unique_id=2082913987]
+position = Vector2(1018, 387)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("5_flower_04")
+
+[node name="Flower05_TopRight" type="Sprite2D" parent="Flowers" unique_id=325440642]
+position = Vector2(1267, 387)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("6_flower_05")
+
+[node name="Flower06_BottomLeft" type="Sprite2D" parent="Flowers" unique_id=1219444988]
+position = Vector2(262, 598.00006)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("7_flower_06")
+
+[node name="Flower07_BottomSecond" type="Sprite2D" parent="Flowers" unique_id=1608440755]
+position = Vector2(510, 598)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_flower_07")
+
+[node name="Flower08_BottomMiddle" type="Sprite2D" parent="Flowers" unique_id=1077239657]
+position = Vector2(763, 598)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("9_flower_08")
+
+[node name="Flower09_BottomFourth" type="Sprite2D" parent="Flowers" unique_id=1703888204]
+position = Vector2(1018, 598)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("10_flower_09")
+
+[node name="Flower10_BottomRight" type="Sprite2D" parent="Flowers" unique_id=576649942]
+position = Vector2(1267, 598)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("11_flower_10")

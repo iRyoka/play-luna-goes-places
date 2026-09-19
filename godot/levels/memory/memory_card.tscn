@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_card.gd" id="1_card"]
+
+[node name="MemoryCard" type="Button"]
+custom_minimum_size = Vector2(260, 210)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("1_card")

@@ -1,0 +1,13 @@
+/.godot/
+/.import/
+/builds/
+/local.paths.ps1
+*.tmp
+*.log
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+**/export_credentials.cfg

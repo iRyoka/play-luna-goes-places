@@ -1,0 +1,160 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://levels/drag_match/drag_match.gd" id="1_level"]
+[ext_resource type="Script" path="res://levels/drag_match/drag_match_backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" path="res://levels/drag_match/draggable.gd" id="3_draggable"]
+[ext_resource type="Script" path="res://levels/drag_match/drop_target.gd" id="4_target"]
+[ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="5_back"]
+[ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="6_completion"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/drag-match/tbilisi-drag-background.png" id="7_tbilisi_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/drag-match/sun-medallion.png" id="8_sun_medallion"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/drag-match/khinkali.png" id="9_khinkali"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/drag-match/bolnisi-cross-tile.png" id="10_bolnisi_tile"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_piece"]
+radius = 112.0
+
+[sub_resource type="CircleShape2D" id="CircleShape_target"]
+radius = 176.0
+
+[node name="DragMatchLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_level")
+level_id = &"chapter_01/drag_match"
+
+[node name="Gameplay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlaceholderArt" type="Control" parent="Gameplay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_backdrop")
+
+[node name="Artwork" type="TextureRect" parent="Gameplay/PlaceholderArt"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_tbilisi_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Targets" type="Node2D" parent="Gameplay"]
+unique_name_in_owner = true
+
+[node name="CircleTarget" type="Area2D" parent="Gameplay/Targets"]
+position = Vector2(720, 340)
+script = ExtResource("4_target")
+match_id = &"circle"
+shape_kind = 0
+silhouette_color = Color(0.31, 0.42, 0.38, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Targets/CircleTarget"]
+shape = SubResource("CircleShape_target")
+
+[node name="TriangleTarget" type="Area2D" parent="Gameplay/Targets"]
+position = Vector2(1080, 340)
+script = ExtResource("4_target")
+match_id = &"triangle"
+shape_kind = 1
+silhouette_color = Color(0.31, 0.42, 0.38, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Targets/TriangleTarget"]
+shape = SubResource("CircleShape_target")
+
+[node name="SquareTarget" type="Area2D" parent="Gameplay/Targets"]
+position = Vector2(1440, 340)
+script = ExtResource("4_target")
+match_id = &"square"
+shape_kind = 2
+silhouette_color = Color(0.31, 0.42, 0.38, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Targets/SquareTarget"]
+shape = SubResource("CircleShape_target")
+
+[node name="Pieces" type="Node2D" parent="Gameplay"]
+unique_name_in_owner = true
+
+[node name="CirclePiece" type="Area2D" parent="Gameplay/Pieces"]
+position = Vector2(720, 790)
+z_index = 4
+script = ExtResource("3_draggable")
+match_id = &"circle"
+shape_kind = 0
+fill_color = Color(0.94, 0.43, 0.36, 1)
+use_generated_art = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Pieces/CirclePiece"]
+shape = SubResource("CircleShape_piece")
+
+[node name="SunMedallion" type="Sprite2D" parent="Gameplay/Pieces/CirclePiece"]
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("8_sun_medallion")
+
+[node name="TrianglePiece" type="Area2D" parent="Gameplay/Pieces"]
+position = Vector2(1080, 790)
+z_index = 4
+script = ExtResource("3_draggable")
+match_id = &"triangle"
+shape_kind = 1
+fill_color = Color(0.97, 0.7, 0.27, 1)
+use_generated_art = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Pieces/TrianglePiece"]
+shape = SubResource("CircleShape_piece")
+
+[node name="Khinkali" type="Sprite2D" parent="Gameplay/Pieces/TrianglePiece"]
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("9_khinkali")
+
+[node name="SquarePiece" type="Area2D" parent="Gameplay/Pieces"]
+position = Vector2(1440, 790)
+z_index = 4
+script = ExtResource("3_draggable")
+match_id = &"square"
+shape_kind = 2
+fill_color = Color(0.48, 0.45, 0.75, 1)
+use_generated_art = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Pieces/SquarePiece"]
+shape = SubResource("CircleShape_piece")
+
+[node name="BolnisiCrossTile" type="Sprite2D" parent="Gameplay/Pieces/SquarePiece"]
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("10_bolnisi_tile")
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 244.0
+offset_bottom = 244.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("5_back")
+
+[node name="CompletionOverlay" parent="." instance=ExtResource("6_completion")]

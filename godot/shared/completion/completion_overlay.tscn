@@ -1,0 +1,127 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://shared/completion/completion_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" path="res://shared/completion/completion_backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" path="res://shared/completion/luna_celebration.gd" id="3_luna"]
+[ext_resource type="Script" path="res://shared/completion/completion_button.gd" id="4_button"]
+[ext_resource type="Texture2D" path="res://assets/characters/luna/celebration-pose.png" id="5_luna_pose"]
+[ext_resource type="Script" path="res://shared/completion/celebration_ring.gd" id="6_ring"]
+
+[sub_resource type="Gradient" id="Gradient_particles"]
+colors = PackedColorArray(0.95, 0.42, 0.35, 1, 1, 0.82, 0.32, 1, 0.45, 0.72, 0.58, 1, 0.53, 0.42, 0.68, 1)
+
+[node name="CompletionOverlay" type="Control"]
+unique_name_in_owner = true
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_overlay")
+
+[node name="Backdrop" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_backdrop")
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+unique_name_in_owner = true
+emitting = false
+amount = 42
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.92
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, 480)
+initial_velocity_min = 340.0
+initial_velocity_max = 620.0
+scale_amount_min = 10.0
+scale_amount_max = 22.0
+color_ramp = SubResource("Gradient_particles")
+
+[node name="Luna" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -176.0
+offset_right = 210.0
+offset_bottom = 284.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_luna")
+
+[node name="Pose" type="TextureRect" parent="Luna"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_luna_pose")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CelebrationRing" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_ring")
+
+[node name="ReplayButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.25
+anchor_right = 0.25
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -325.0
+offset_top = -120.0
+offset_right = -85.0
+offset_bottom = 120.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("4_button")
+
+[node name="ContinueButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.75
+anchor_top = 0.5
+anchor_right = 0.75
+anchor_bottom = 0.5
+offset_left = 85.0
+offset_top = -120.0
+offset_right = 325.0
+offset_bottom = 120.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("4_button")
+icon_kind = 1
+
+[node name="SuccessPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true

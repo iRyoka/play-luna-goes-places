@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="TrailCourse" format=3]
+
+[ext_resource type="Script" path="res://levels/trail/trail_course.gd" id="1_course"]
+[ext_resource type="Script" path="res://levels/trail/trail_stage.gd" id="2_stage"]
+[ext_resource type="Script" path="res://levels/trail/trail_segment.gd" id="3_segment"]
+
+[sub_resource type="Resource" id="Segment_orchard_straight"]
+script = ExtResource("3_segment")
+points = PackedVector2Array(500, 320, 1080, 320)
+path_width = 250.0
+smooth = false
+
+[sub_resource type="Resource" id="Segment_orchard_descent"]
+script = ExtResource("3_segment")
+points = PackedVector2Array(1080, 320, 1380, 380, 1520, 600, 1420, 820)
+path_width = 210.0
+
+[sub_resource type="Resource" id="Segment_orchard_return"]
+script = ExtResource("3_segment")
+points = PackedVector2Array(1420, 820, 1180, 900, 960, 760, 760, 880)
+path_width = 180.0
+
+[sub_resource type="Resource" id="Stage_bee_orchard"]
+script = ExtResource("2_stage")
+segments = Array[ExtResource("3_segment")]([SubResource("Segment_orchard_straight"), SubResource("Segment_orchard_descent"), SubResource("Segment_orchard_return")])
+containment = 1
+actor_turns_to_travel = false
+
+[resource]
+script = ExtResource("1_course")
+stages = Array[ExtResource("2_stage")]([SubResource("Stage_bee_orchard")])

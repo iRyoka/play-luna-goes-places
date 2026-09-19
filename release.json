@@ -1,0 +1,21 @@
+{
+    "version":  "0.3.0",
+    "source_tag":  "0.3.0",
+    "source_commit":  "52647f74007e48c1acac462360ad6191d3bbb4e4",
+    "template_commit":  "c585adb5c7767e831e6133c3f42cc27e2027d0eb",
+    "android_version_code":  3000,
+    "artifacts":  {
+                      "apk":  {
+                                  "name":  "luna-goes-places-0.3.0.apk",
+                                  "sha256":  "423e6d3912d114dd02e2c46f0d2539f15437e45135edcf36cdffd3162b77b481",
+                                  "bytes":  111915317
+                              },
+                      "web":  {
+                                  "name":  "luna-goes-places-web-0.3.0.zip",
+                                  "sha256":  "5e59d7f8ba90b521c3ee0c1e6317578bf775f193b4a95fbcfc593adf864f832c",
+                                  "bytes":  94170791
+                              }
+                  },
+    "signing_certificate_sha256":  "e2065b37ef62557a765288b6e53c1d8e9c66a4538bbecef76beaa472a36b29ca",
+    "public_commit":  null
+}

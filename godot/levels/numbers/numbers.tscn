@@ -1,0 +1,158 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://levels/numbers/numbers.gd" id="1_numbers"]
+[ext_resource type="Script" path="res://levels/numbers/numbers_backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" path="res://levels/numbers/planter_slot.gd" id="3_planter_slot"]
+[ext_resource type="Script" path="res://levels/numbers/planter_candidate.gd" id="4_planter_candidate"]
+[ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="5_back"]
+[ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="6_completion"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/numbers/mountain-forest-background.png" id="7_background"]
+
+[node name="NumbersLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_numbers")
+level_id = &"chapter_01/numbers"
+
+[node name="Gameplay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Gameplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_background")
+expand_mode = 1
+
+[node name="PlaceholderArt" type="Control" parent="Gameplay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_backdrop")
+
+[node name="SafePlayArea" type="Control" parent="Gameplay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -800.0
+offset_top = -480.0
+offset_right = 800.0
+offset_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SequenceRow" type="HBoxContainer" parent="Gameplay/SafePlayArea"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 125.0
+offset_bottom = 425.0
+grow_horizontal = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Planter0" type="Control" parent="Gameplay/SafePlayArea/SequenceRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 270)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_planter_slot")
+
+[node name="Planter1" type="Control" parent="Gameplay/SafePlayArea/SequenceRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 270)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_planter_slot")
+
+[node name="Planter2" type="Control" parent="Gameplay/SafePlayArea/SequenceRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 270)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_planter_slot")
+
+[node name="Planter3" type="Control" parent="Gameplay/SafePlayArea/SequenceRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 270)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_planter_slot")
+
+[node name="AnswerRow" type="HBoxContainer" parent="Gameplay/SafePlayArea"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -330.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 58
+alignment = 1
+
+[node name="Candidate0" type="Button" parent="Gameplay/SafePlayArea/AnswerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 260)
+layout_mode = 2
+focus_mode = 0
+flat = true
+script = ExtResource("4_planter_candidate")
+
+[node name="Candidate1" type="Button" parent="Gameplay/SafePlayArea/AnswerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 260)
+layout_mode = 2
+focus_mode = 0
+flat = true
+script = ExtResource("4_planter_candidate")
+
+[node name="Candidate2" type="Button" parent="Gameplay/SafePlayArea/AnswerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 260)
+layout_mode = 2
+focus_mode = 0
+flat = true
+script = ExtResource("4_planter_candidate")
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 244.0
+offset_bottom = 244.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("5_back")
+
+[node name="CompletionOverlay" parent="." instance=ExtResource("6_completion")]
+
+[connection signal="completion_started" from="." to="Gameplay/PlaceholderArt" method="play_completion_reaction"]

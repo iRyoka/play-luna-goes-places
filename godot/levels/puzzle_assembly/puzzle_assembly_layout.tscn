@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bvcsstqgoga35"]
+
+[ext_resource type="Texture2D" uid="uid://skslru16h7ik" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.png" id="1_background"]
+[ext_resource type="Texture2D" uid="uid://d1r24o73ngcrq" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-theatre-base-sliced.png" id="2_base"]
+[ext_resource type="Texture2D" uid="uid://xqwihpc65akc" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-clock-tower-sliced.png" id="3_tower"]
+[ext_resource type="Texture2D" uid="uid://ctphaw4xo8ymr" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-left-wing-sliced.png" id="4_left_wing"]
+[ext_resource type="Texture2D" uid="uid://dmfrk3kwxgarj" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-center-facade-sliced.png" id="5_facade"]
+[ext_resource type="Texture2D" uid="uid://bmh7adu0tfdas" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-right-wing-sliced.png" id="6_right_wing"]
+
+[node name="PuzzleAssemblyLayout" type="Control" unique_id=1810893891]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 2160.0
+offset_bottom = 1080.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Backdrop" type="TextureRect" parent="." unique_id=1052365106]
+self_modulate = Color(0.93, 0.93, 0.93, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="AssemblyPieces" type="Node2D" parent="." unique_id=449421801]
+
+[node name="TheatreBase" type="Sprite2D" parent="AssemblyPieces" unique_id=5924348]
+z_index = 2
+texture_filter = 4
+position = Vector2(1062, 777)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("2_base")
+
+[node name="ClockTower" type="Sprite2D" parent="AssemblyPieces" unique_id=1912532081]
+z_index = 1
+texture_filter = 4
+position = Vector2(796, 635.99994)
+scale = Vector2(0.585, 0.585)
+texture = ExtResource("3_tower")
+
+[node name="LeftWing" type="Sprite2D" parent="AssemblyPieces" unique_id=1256928934]
+texture_filter = 4
+position = Vector2(939.00006, 579)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("4_left_wing")
+
+[node name="CenterFacade" type="Sprite2D" parent="AssemblyPieces" unique_id=1630876978]
+z_index = 3
+texture_filter = 4
+position = Vector2(1143.0001, 484.00003)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("5_facade")
+
+[node name="RightWing" type="Sprite2D" parent="AssemblyPieces" unique_id=1085081250]
+z_index = 1
+texture_filter = 4
+position = Vector2(1371.0001, 656)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("6_right_wing")

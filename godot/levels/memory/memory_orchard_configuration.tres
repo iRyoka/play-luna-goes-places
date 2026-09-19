@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MemoryConfiguration" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_configuration.gd" id="1_configuration"]
+
+[resource]
+script = ExtResource("1_configuration")
+rows = 4
+columns = 4
+pair_ids = [&"cat", &"grapes", &"flower", &"bird", &"bread", &"tower", &"butterfly", &"pomegranate"]
+card_size = Vector2(220, 178)
+card_separation = 24.0
+board_center_offset = Vector2(0, 64)

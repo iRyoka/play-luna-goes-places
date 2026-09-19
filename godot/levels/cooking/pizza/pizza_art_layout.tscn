@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://c7l4md7a88jk7" path="res://assets/gameplay/cooking/pizza/pizza-kitchen-background.png" id="1_background"]
+[ext_resource type="Texture2D" uid="uid://c3lqicurknmw8" path="res://assets/gameplay/cooking/pizza/pizza-raw.png" id="2_pizzaraw"]
+[ext_resource type="Texture2D" uid="uid://yvb8o5umx8yn" path="res://assets/gameplay/cooking/pizza/pizza-sauce.png" id="3_pizzasauce"]
+[ext_resource type="Texture2D" uid="uid://b16j3vgmlbirt" path="res://assets/gameplay/cooking/pizza/pizza-cheese.png" id="4_pizzacheese"]
+[ext_resource type="Texture2D" uid="uid://dwonm2mknbdnf" path="res://assets/gameplay/cooking/pizza/pizza-baked.png" id="5_pizzabaked"]
+[ext_resource type="Texture2D" uid="uid://cf85j2arm2kh4" path="res://assets/gameplay/cooking/pizza/sauce-jar-upright.png" id="6_saucejarupright"]
+[ext_resource type="Texture2D" uid="uid://bpptd6p1xxgry" path="res://assets/gameplay/cooking/pizza/sauce-jar-pouring.png" id="7_saucejarpouring"]
+[ext_resource type="Texture2D" uid="uid://dxcqvka5wsk1n" path="res://assets/gameplay/cooking/pizza/cheese-bowl-upright.png" id="8_cheesebowlupright"]
+[ext_resource type="Texture2D" uid="uid://cocmb8tg5asf1" path="res://assets/gameplay/cooking/pizza/cheese-bowl-tipping.png" id="9_cheesebowltipping"]
+[ext_resource type="Texture2D" uid="uid://cqdvnlltcnvns" path="res://assets/gameplay/cooking/pizza/bowl-salami.png" id="10_bowlsalami"]
+[ext_resource type="Texture2D" uid="uid://cdxpwdte8vbk1" path="res://assets/gameplay/cooking/pizza/bowl-olive.png" id="11_bowlolive"]
+[ext_resource type="Texture2D" uid="uid://dg6y7i84xrqch" path="res://assets/gameplay/cooking/pizza/bowl-mushroom.png" id="12_bowlmushroom"]
+[ext_resource type="Texture2D" uid="uid://c02aysssjunen" path="res://assets/gameplay/cooking/pizza/bowl-basil.png" id="13_bowlbasil"]
+[ext_resource type="Texture2D" uid="uid://g82ivyglbv3g" path="res://assets/ui/common/circular-paper-button.png" id="14_donemedallion"]
+[ext_resource type="Texture2D" uid="uid://canw83nmcqspj" path="res://assets/gameplay/cooking/pizza/done-check.png" id="15_donecheck"]
+[ext_resource type="Texture2D" uid="uid://jr72fudggldu" path="res://assets/gameplay/cooking/pizza/recipe-sauce.png" id="16_recipesauce"]
+[ext_resource type="Texture2D" uid="uid://cugux0u0mk4c2" path="res://assets/gameplay/cooking/pizza/recipe-cheese.png" id="17_recipecheese"]
+[ext_resource type="Texture2D" uid="uid://br0osqdhpu5n1" path="res://assets/gameplay/cooking/pizza/recipe-toppings.png" id="18_recipetoppings"]
+[ext_resource type="Texture2D" uid="uid://ggy7oy71kten" path="res://assets/gameplay/cooking/pizza/recipe-bake.png" id="19_recipebake"]
+
+[node name="PizzaArtworkLayout" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(1080, 540)
+scale = Vector2(1.000000, 1.000000)
+texture = ExtResource("1_background")
+
+[node name="PizzaRaw" type="Sprite2D" parent="."]
+position = Vector2(1080, 815)
+scale = Vector2(0.644444, 0.644444)
+texture = ExtResource("2_pizzaraw")
+
+[node name="PizzaSauce" type="Sprite2D" parent="."]
+position = Vector2(1080, 815)
+scale = Vector2(0.644444, 0.644444)
+texture = ExtResource("3_pizzasauce")
+
+[node name="PizzaCheese" type="Sprite2D" parent="."]
+position = Vector2(1080, 815)
+scale = Vector2(0.644444, 0.644444)
+texture = ExtResource("4_pizzacheese")
+
+[node name="PizzaBaked" type="Sprite2D" parent="."]
+position = Vector2(1080, 815)
+scale = Vector2(0.644444, 0.644444)
+texture = ExtResource("5_pizzabaked")
+
+[node name="SauceJarUpright" type="Sprite2D" parent="."]
+position = Vector2(760, 980)
+scale = Vector2(0.650000, 0.650000)
+texture = ExtResource("6_saucejarupright")
+
+[node name="SauceJarPouring" type="Sprite2D" parent="."]
+position = Vector2(760, 980)
+scale = Vector2(0.650000, 0.650000)
+texture = ExtResource("7_saucejarpouring")
+
+[node name="CheeseBowlUpright" type="Sprite2D" parent="."]
+position = Vector2(760, 980)
+scale = Vector2(0.650000, 0.650000)
+texture = ExtResource("8_cheesebowlupright")
+
+[node name="CheeseBowlTipping" type="Sprite2D" parent="."]
+position = Vector2(760, 980)
+scale = Vector2(0.650000, 0.650000)
+texture = ExtResource("9_cheesebowltipping")
+
+[node name="BowlSalami" type="Sprite2D" parent="."]
+position = Vector2(340, 985)
+scale = Vector2(0.550000, 0.550000)
+texture = ExtResource("10_bowlsalami")
+
+[node name="BowlOlive" type="Sprite2D" parent="."]
+position = Vector2(620, 985)
+scale = Vector2(0.550000, 0.550000)
+texture = ExtResource("11_bowlolive")
+
+[node name="BowlMushroom" type="Sprite2D" parent="."]
+position = Vector2(1540, 985)
+scale = Vector2(0.550000, 0.550000)
+texture = ExtResource("12_bowlmushroom")
+
+[node name="BowlBasil" type="Sprite2D" parent="."]
+position = Vector2(1820, 985)
+scale = Vector2(0.550000, 0.550000)
+texture = ExtResource("13_bowlbasil")
+
+[node name="DoneMedallion" type="Sprite2D" parent="."]
+position = Vector2(1910, 760)
+scale = Vector2(0.520833, 0.520833)
+texture = ExtResource("14_donemedallion")
+
+[node name="DoneCheck" type="Sprite2D" parent="."]
+position = Vector2(1910, 760)
+scale = Vector2(0.346667, 0.346667)
+texture = ExtResource("15_donecheck")
+
+[node name="RecipeSauce" type="Sprite2D" parent="."]
+position = Vector2(682, 113)
+scale = Vector2(0.554054, 0.554054)
+texture = ExtResource("16_recipesauce")
+
+[node name="RecipeCheese" type="Sprite2D" parent="."]
+position = Vector2(866, 113)
+scale = Vector2(0.554054, 0.554054)
+texture = ExtResource("17_recipecheese")
+
+[node name="RecipeToppings" type="Sprite2D" parent="."]
+position = Vector2(1050, 113)
+scale = Vector2(0.546667, 0.546667)
+texture = ExtResource("18_recipetoppings")
+
+[node name="RecipeBake" type="Sprite2D" parent="."]
+position = Vector2(1234, 113)
+scale = Vector2(0.550336, 0.550336)
+texture = ExtResource("19_recipebake")

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MemoryLevelConfiguration" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_level_configuration.gd" id="1_script"]
+[ext_resource type="Script" path="res://levels/memory/memory_configuration.gd" id="2_stage_script"]
+
+[sub_resource type="Resource" id="StageOne"]
+script = ExtResource("2_stage_script")
+rows = 1
+columns = 2
+pair_ids = [&"cat"]
+random_pair_pool = [&"cat", &"grapes", &"flower", &"bird", &"bread", &"tower", &"butterfly", &"pomegranate"]
+select_pairs_randomly = true
+
+[sub_resource type="Resource" id="StageTwo"]
+script = ExtResource("2_stage_script")
+rows = 2
+columns = 2
+pair_ids = [&"cat", &"flower"]
+random_pair_pool = [&"cat", &"grapes", &"flower", &"bird", &"bread", &"tower", &"butterfly", &"pomegranate"]
+select_pairs_randomly = true
+
+[sub_resource type="Resource" id="StageThree"]
+script = ExtResource("2_stage_script")
+rows = 2
+columns = 4
+pair_ids = [&"cat", &"flower", &"bird", &"grapes"]
+random_pair_pool = [&"cat", &"grapes", &"flower", &"bird", &"bread", &"tower", &"butterfly", &"pomegranate"]
+select_pairs_randomly = true
+
+[resource]
+script = ExtResource("1_script")
+stages = Array[ExtResource("2_stage_script")]([SubResource("StageOne"), SubResource("StageTwo"), SubResource("StageThree")])

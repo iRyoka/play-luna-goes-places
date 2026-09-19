@@ -1,0 +1,147 @@
+[gd_resource type="Resource" script_class="PuzzleBoard" load_steps=26 format=3]
+
+[ext_resource type="Script" uid="uid://cef6vjil0sseq" path="res://levels/puzzle_assembly/puzzle_board.gd" id="1_board"]
+[ext_resource type="Script" uid="uid://dyi41gopoh7kk" path="res://levels/puzzle_assembly/puzzle_stage.gd" id="2_stage"]
+[ext_resource type="Script" uid="uid://bnbofp2yileh1" path="res://levels/puzzle_assembly/puzzle_part.gd" id="3_part"]
+[ext_resource type="Texture2D" uid="uid://skslru16h7ik" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.png" id="4_background"]
+[ext_resource type="Texture2D" uid="uid://d1r24o73ngcrq" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-theatre-base-sliced.png" id="5_base"]
+[ext_resource type="Texture2D" uid="uid://xqwihpc65akc" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-clock-tower-sliced.png" id="6_tower"]
+[ext_resource type="Texture2D" uid="uid://ctphaw4xo8ymr" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-left-wing-sliced.png" id="7_left_wing"]
+[ext_resource type="Texture2D" uid="uid://dmfrk3kwxgarj" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-center-facade-sliced.png" id="8_facade"]
+[ext_resource type="Texture2D" uid="uid://bmh7adu0tfdas" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-right-wing-sliced.png" id="9_right_wing"]
+[ext_resource type="Texture2D" uid="uid://dn7shxcyomwk7" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-roof-sliced.png" id="10_barn_roof"]
+[ext_resource type="Texture2D" uid="uid://c1htkqb76c25v" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-left-wall-sliced.png" id="11_barn_left_wall"]
+[ext_resource type="Texture2D" uid="uid://dw04827m87fbr" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-right-wall-sliced.png" id="12_barn_right_wall"]
+[ext_resource type="Texture2D" uid="uid://ck11vbhlwtvab" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-door-sliced.png" id="13_barn_door"]
+[ext_resource type="Texture2D" uid="uid://dtrsfi6aaw1fr" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-sheep-sliced.png" id="14_barn_sheep"]
+[ext_resource type="Texture2D" uid="uid://wygdfkn56xqy" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-jar-sliced.png" id="15_barn_jar"]
+[ext_resource type="Texture2D" uid="uid://dthbjmdbuhy12" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-backing-sliced.png" id="16_barn_backing"]
+[ext_resource type="Texture2D" uid="uid://c6x5frblrbo2d" path="res://assets/environments/chapter-01/puzzle-assembly/kakheti-barn-background.png" id="17_barn_background"]
+
+[sub_resource type="Resource" id="Resource_theatre_base"]
+script = ExtResource("3_part")
+part_id = &"theatre_base"
+artwork = ExtResource("5_base")
+assembled_position = Vector2(1062, 777)
+assembled_scale = Vector2(0.65, 0.65)
+placed_z_index = 2
+snap_radius = 285.0
+
+[sub_resource type="Resource" id="Resource_clock_tower"]
+script = ExtResource("3_part")
+part_id = &"clock_tower"
+artwork = ExtResource("6_tower")
+assembled_position = Vector2(796, 636)
+assembled_scale = Vector2(0.585, 0.585)
+placed_z_index = 1
+snap_radius = 300.0
+
+[sub_resource type="Resource" id="Resource_left_wing"]
+script = ExtResource("3_part")
+part_id = &"left_wing"
+artwork = ExtResource("7_left_wing")
+assembled_position = Vector2(939, 579)
+assembled_scale = Vector2(0.65, 0.65)
+placed_z_index = 0
+snap_radius = 195.0
+
+[sub_resource type="Resource" id="Resource_center_facade"]
+script = ExtResource("3_part")
+part_id = &"center_facade"
+artwork = ExtResource("8_facade")
+assembled_position = Vector2(1143, 484)
+assembled_scale = Vector2(0.65, 0.65)
+placed_z_index = 3
+snap_radius = 250.0
+
+[sub_resource type="Resource" id="Resource_right_wing"]
+script = ExtResource("3_part")
+part_id = &"right_wing"
+artwork = ExtResource("9_right_wing")
+assembled_position = Vector2(1371, 656)
+assembled_scale = Vector2(0.65, 0.65)
+placed_z_index = 1
+snap_radius = 245.0
+
+[sub_resource type="Resource" id="Resource_theatre_stage"]
+script = ExtResource("2_stage")
+background = ExtResource("4_background")
+parts = Array[ExtResource("3_part")]([SubResource("Resource_theatre_base"), SubResource("Resource_clock_tower"), SubResource("Resource_left_wing"), SubResource("Resource_center_facade"), SubResource("Resource_right_wing")])
+start_slots = Array[Rect2]([Rect2(24, 300, 480, 300), Rect2(24, 720, 480, 300), Rect2(1708, 110, 428, 290), Rect2(1708, 400, 428, 290), Rect2(1708, 690, 428, 290)])
+shuffle_start_slots = true
+
+[sub_resource type="Resource" id="Resource_barn_roof"]
+script = ExtResource("3_part")
+part_id = &"barn_roof"
+artwork = ExtResource("10_barn_roof")
+assembled_position = Vector2(1080, 300)
+assembled_scale = Vector2(1, 1)
+placed_z_index = 2
+snap_radius = 320.0
+
+[sub_resource type="Resource" id="Resource_barn_left_wall"]
+script = ExtResource("3_part")
+part_id = &"barn_left_wall"
+artwork = ExtResource("11_barn_left_wall")
+assembled_position = Vector2(759, 641)
+assembled_scale = Vector2(1, 1)
+placed_z_index = 1
+snap_radius = 250.0
+
+[sub_resource type="Resource" id="Resource_barn_right_wall"]
+script = ExtResource("3_part")
+part_id = &"barn_right_wall"
+artwork = ExtResource("12_barn_right_wall")
+assembled_position = Vector2(1396, 628)
+assembled_scale = Vector2(1, 1.11)
+placed_z_index = 1
+snap_radius = 240.0
+
+[sub_resource type="Resource" id="Resource_barn_door"]
+script = ExtResource("3_part")
+part_id = &"barn_door"
+artwork = ExtResource("13_barn_door")
+assembled_position = Vector2(1078, 740)
+assembled_scale = Vector2(1.05, 1.05)
+placed_z_index = 3
+snap_radius = 200.0
+
+[sub_resource type="Resource" id="Resource_barn_sheep"]
+script = ExtResource("3_part")
+part_id = &"barn_sheep"
+artwork = ExtResource("14_barn_sheep")
+assembled_position = Vector2(1075, 491)
+assembled_scale = Vector2(0.85, 0.85)
+placed_z_index = 4
+snap_radius = 180.0
+
+[sub_resource type="Resource" id="Resource_barn_jar"]
+script = ExtResource("3_part")
+part_id = &"barn_jar"
+artwork = ExtResource("15_barn_jar")
+assembled_position = Vector2(1456, 757)
+assembled_scale = Vector2(1, 1)
+placed_z_index = 5
+snap_radius = 160.0
+
+[sub_resource type="Resource" id="Resource_barn_backing"]
+script = ExtResource("3_part")
+part_id = &"barn_backing"
+artwork = ExtResource("16_barn_backing")
+assembled_position = Vector2(1085, 476)
+assembled_scale = Vector2(1, 1)
+placed_z_index = 0
+
+[sub_resource type="Resource" id="Resource_barn_stage"]
+script = ExtResource("2_stage")
+background = ExtResource("17_barn_background")
+background_saturation = 1.0
+background_dim = 1.0
+parts = Array[ExtResource("3_part")]([SubResource("Resource_barn_roof"), SubResource("Resource_barn_left_wall"), SubResource("Resource_barn_right_wall"), SubResource("Resource_barn_door"), SubResource("Resource_barn_sheep"), SubResource("Resource_barn_jar")])
+backing_parts = Array[ExtResource("3_part")]([SubResource("Resource_barn_backing")])
+start_slots = Array[Rect2]([Rect2(20, 280, 520, 250), Rect2(20, 545, 520, 250), Rect2(20, 810, 520, 250), Rect2(1620, 120, 520, 250), Rect2(1620, 385, 520, 250), Rect2(1620, 650, 520, 250)])
+shuffle_start_slots = true
+
+[resource]
+script = ExtResource("1_board")
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_theatre_stage"), SubResource("Resource_barn_stage")])

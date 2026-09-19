@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cidlrtoskw0rj"]
+
+[ext_resource type="Texture2D" uid="uid://bmbhqvcafjh05" path="res://assets/gameplay/cooking/kitchen-background.png" id="1_background"]
+[ext_resource type="Texture2D" uid="uid://xxw71mrm0j4w" path="res://assets/gameplay/cooking/pot-empty-large.png" id="2_pot"]
+[ext_resource type="Texture2D" uid="uid://dt0cmkg1jk8sn" path="res://assets/gameplay/cooking/soup-surface.png" id="3_soup"]
+
+[node name="CookingArtworkLayout" type="Node2D" unique_id=1466004906]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=2123767494]
+position = Vector2(1080, 540)
+texture = ExtResource("1_background")
+
+[node name="EmptyPot" type="Sprite2D" parent="." unique_id=1904469095]
+position = Vector2(1080, 600)
+scale = Vector2(0.599119, 0.599119)
+texture = ExtResource("2_pot")
+
+[node name="SoupSurface" type="Sprite2D" parent="." unique_id=1325246632]
+position = Vector2(1076.0001, 526)
+scale = Vector2(0.43041235, 0.4356884)
+texture = ExtResource("3_soup")

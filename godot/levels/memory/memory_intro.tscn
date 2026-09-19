@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://levels/memory/memory_board.tscn" id="2_board"]
+[ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="3_back"]
+[ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="4_completion"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/memory/waterfall-background.png" id="5_background"]
+[ext_resource type="Texture2D" path="res://assets/characters/luna/memory-portrait.png" id="6_portrait"]
+[ext_resource type="Resource" path="res://levels/memory/memory_intro_level_configuration.tres" id="7_configuration"]
+[ext_resource type="Script" path="res://levels/memory/memory_stage_indicator.gd" id="8_indicator"]
+
+[node name="MemoryIntroLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_level")
+level_id = &"chapter_01/memory_intro"
+configuration = ExtResource("7_configuration")
+
+[node name="Gameplay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Gameplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_background")
+expand_mode = 1
+
+[node name="LunaPortrait" type="TextureRect" parent="Gameplay"]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -105.0
+offset_top = 4.0
+offset_right = 105.0
+offset_bottom = 194.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("6_portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MemoryBoard" parent="Gameplay" instance=ExtResource("2_board")]
+unique_name_in_owner = true
+
+[node name="StageIndicator" type="Control" parent="Gameplay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_indicator")
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 244.0
+offset_bottom = 244.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("3_back")
+
+[node name="CompletionOverlay" parent="." instance=ExtResource("4_completion")]

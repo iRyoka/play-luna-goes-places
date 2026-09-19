@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://h0yvtt3vfbsn"]
+
+[ext_resource type="Script" uid="uid://b1o07nqlgp8n7" path="res://map/chapter_map.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://b1nu45o5lvu47" path="res://map/chapter_01/backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" uid="uid://dmhlccov4pg5l" path="res://app/settings_button.gd" id="4_settings"]
+[ext_resource type="Script" uid="uid://d0cw7rc74nh58" path="res://map/chapter_01/ambient.gd" id="5_ambient"]
+[ext_resource type="Texture2D" uid="uid://drpn0ada7y5g1" path="res://assets/characters/luna/map-indicators/luna-map-indicator-hanging.png" id="6_hanging"]
+[ext_resource type="Texture2D" uid="uid://duf2f87rmmb7t" path="res://assets/characters/luna/map-indicators/luna-map-indicator-standing.png" id="7_standing"]
+[ext_resource type="Texture2D" uid="uid://xh17pm6lb4so" path="res://assets/characters/luna/map-indicators/luna-map-indicator-peeking.png" id="8_peeking"]
+
+[node name="ChapterMap" type="Control" unique_id=47064723]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_map")
+chapter_id = &"chapter_01"
+marker_slots = {
+&"BatumiShore": Vector2(0.93, 0.47),
+&"CoastRoad": Vector2(0.8, 0.66),
+&"CreekBend": Vector2(0.73, 0.48),
+&"DragMatchLocation": Vector2(0.13, 0.73),
+&"ForestClearing": Vector2(0.84, 0.3),
+&"MemoryIntroLocation": Vector2(0.46, 0.36),
+&"MemoryLocation": Vector2(0.31, 0.64),
+&"MountainPass": Vector2(0.64, 0.28),
+&"NumbersLocation": Vector2(0.25, 0.43),
+&"ValleyLookout": Vector2(0.57, 0.62)
+}
+
+[node name="PlaceholderBackdrop" type="Control" parent="." unique_id=2046887188]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_backdrop")
+
+[node name="Ambient" type="Control" parent="." unique_id=404090205]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_ambient")
+
+[node name="Landmarks" type="Node2D" parent="." unique_id=738848036]
+
+[node name="LunaIndicatorHanging" type="Sprite2D" parent="Landmarks" unique_id=861438279]
+z_index = 1
+position = Vector2(239.79999, 807.4001)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("6_hanging")
+
+[node name="LunaIndicatorStanding" type="Sprite2D" parent="Landmarks" unique_id=2120707982]
+z_index = 1
+position = Vector2(892.6, 397.80002)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("7_standing")
+
+[node name="LunaIndicatorPeeking" type="Sprite2D" parent="Landmarks" unique_id=941808169]
+z_index = 1
+position = Vector2(539, 418.4)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("8_peeking")
+
+[node name="SettingsButton" type="Button" parent="." unique_id=587423958]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 64.0
+offset_right = -64.0
+offset_bottom = 244.0
+grow_horizontal = 0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+script = ExtResource("4_settings")

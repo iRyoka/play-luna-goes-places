@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MemoryLevelConfiguration" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://levels/memory/memory_level_configuration.gd" id="1_script"]
+[ext_resource type="Resource" path="res://levels/memory/memory_orchard_configuration.tres" id="2_stage"]
+
+[resource]
+script = ExtResource("1_script")
+stages = Array[ExtResource("2_stage")]([ExtResource("2_stage")])

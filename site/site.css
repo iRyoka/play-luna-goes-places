@@ -1,0 +1,72 @@
+:root {
+  color: #253b42;
+  background: #f8f0dd;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+.journey {
+  align-items: center;
+  background: linear-gradient(rgba(104, 181, 207, .2), rgba(80, 127, 79, .2)), url("assets/chapter-01-map.png") center / cover no-repeat;
+  display: flex;
+  justify-content: center;
+  min-height: min(720px, 78svh);
+  overflow: hidden;
+  padding: 3rem 1.25rem 8rem;
+  position: relative;
+}
+
+.language-switch { display: flex; gap: .35rem; position: absolute; right: 1.25rem; top: 1.25rem; z-index: 3; }
+.language-switch button { background: rgba(255, 249, 235, .9); border: 1px solid rgba(56, 77, 124, .45); border-radius: 999px; color: #384d7c; cursor: pointer; font: 700 .82rem system-ui, sans-serif; padding: .42rem .75rem; }
+.language-switch button[aria-pressed="true"] { background: #384d7c; color: #fffdf3; }
+.language-switch button:focus-visible { outline: 3px solid #fffdf3; outline-offset: 3px; }
+
+.paper-card, .paper-note {
+  background: #fff9eb;
+  border: 2px solid rgba(111, 82, 54, .16);
+  border-radius: 28px 23px 31px 25px;
+  box-shadow: 0 14px 0 rgba(72, 105, 77, .12), 0 22px 36px rgba(58, 74, 52, .16);
+  max-width: 570px;
+  padding: clamp(1.75rem, 5vw, 3rem);
+  position: relative;
+  text-align: center;
+  z-index: 2;
+}
+
+.app-icon {
+  border-radius: 27%;
+  box-shadow: 0 4px 0 rgba(72, 105, 77, .2);
+  display: block;
+  height: auto;
+  margin: 0 auto 1rem;
+  width: clamp(72px, 14vw, 96px);
+}
+
+.eyebrow { color: #885b52; font-family: system-ui, sans-serif; font-size: .82rem; font-weight: 700; letter-spacing: .08em; margin: 0 0 .6rem; text-transform: uppercase; }
+h1, h2, p { margin-top: 0; }
+h1 { color: #384d7c; font-size: clamp(2.25rem, 7vw, 4.5rem); letter-spacing: -.045em; line-height: .96; margin-bottom: 1rem; }
+h2 { color: #384d7c; font-size: clamp(1.65rem, 4vw, 2.3rem); margin-bottom: .65rem; }
+.intro { font-size: clamp(1.1rem, 2.4vw, 1.35rem); line-height: 1.45; margin: 0 auto 1.65rem; max-width: 28rem; }
+
+.actions { display: flex; gap: .8rem; justify-content: center; }
+.button { border-radius: 999px; display: inline-block; font-family: system-ui, sans-serif; font-weight: 750; padding: .9rem 1.25rem; text-decoration: none; }
+.button-primary { background: #ec785f; box-shadow: 0 4px 0 #b85546; color: #fffdf3; }
+.button-secondary { background: #f4d583; box-shadow: 0 4px 0 #c9a65f; color: #35424b; }
+.button-feedback { background: #829b68; box-shadow: 0 4px 0 #5e784c; color: #fffdf3; margin-top: .5rem; }
+.button:hover, .button:focus-visible { filter: brightness(1.06); outline: 3px solid #384d7c; outline-offset: 3px; }
+.version-note { color: #61706b; font-family: system-ui, sans-serif; font-size: .88rem; margin: 1.35rem 0 0; }
+
+.grown-ups { align-items: center; background: #f1e4c9; display: flex; gap: 2rem; justify-content: space-between; padding: 1.7rem max(1.25rem, calc((100% - 1050px) / 2)); }
+.grown-ups h2 { font-size: 1.55rem; margin: 0; }.grown-ups .eyebrow { margin-bottom: .3rem; }
+.grown-ups nav { display: flex; flex-wrap: wrap; gap: 1rem; }.grown-ups a { color: #384d7c; font-family: system-ui, sans-serif; font-weight: 700; text-underline-offset: .2em; }
+.feedback { background: #fbf5e8; padding: 4rem 1.25rem; }.paper-note { margin: 0 auto; max-width: 640px; text-align: left; }.paper-note p { font-family: system-ui, sans-serif; line-height: 1.55; max-width: 54ch; }.issues-intro { margin-bottom: 1rem; }.issues-button { margin-bottom: 1.5rem; }
+form { display: grid; gap: .45rem; margin-top: 1.5rem; } label { font-family: system-ui, sans-serif; font-size: .94rem; font-weight: 700; margin-top: .55rem; } input, textarea { background: #fffdf5; border: 2px solid #b9a985; border-radius: 12px; color: #253b42; font: inherit; padding: .75rem; width: 100%; } textarea { resize: vertical; } input:focus, textarea:focus { border-color: #384d7c; outline: 3px solid rgba(56, 77, 124, .2); } form .button { border: 0; cursor: pointer; justify-self: start; margin-top: .8rem; }
+footer { background: #5e8063; color: #fff9eb; font-family: system-ui, sans-serif; font-size: .9rem; padding: 1.2rem; text-align: center; } footer p { margin: 0; }
+
+@media (max-width: 600px) {
+  .journey { align-items: flex-start; min-height: 640px; padding-top: 5.25rem; }.language-switch { right: 1rem; top: 1rem; }
+  .actions, .grown-ups { align-items: stretch; flex-direction: column; }.button { text-align: center; }.grown-ups { gap: 1.2rem; }.grown-ups nav { flex-direction: column; gap: .8rem; }
+}
