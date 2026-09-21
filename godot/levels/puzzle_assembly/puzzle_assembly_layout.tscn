@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvcsstqgoga35"]
 
-[ext_resource type="Texture2D" uid="uid://skslru16h7ik" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.png" id="1_background"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.webp" id="1_background"]
 [ext_resource type="Texture2D" uid="uid://d1r24o73ngcrq" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-theatre-base-sliced.png" id="2_base"]
 [ext_resource type="Texture2D" uid="uid://xqwihpc65akc" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-clock-tower-sliced.png" id="3_tower"]
 [ext_resource type="Texture2D" uid="uid://ctphaw4xo8ymr" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-left-wing-sliced.png" id="4_left_wing"]

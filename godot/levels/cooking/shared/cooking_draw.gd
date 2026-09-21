@@ -17,9 +17,13 @@ static func texture_centered(
 	target_width: float,
 	modulate_color := Color.WHITE,
 ) -> void:
+	canvas.draw_texture_rect(texture, centered_rect(texture, center, target_width), false, modulate_color)
+
+
+static func centered_rect(texture: Texture2D, center: Vector2, target_width: float) -> Rect2:
 	var texture_size := texture.get_size()
 	var target_size := Vector2(target_width, target_width * texture_size.y / texture_size.x)
-	texture_centered_size(canvas, texture, center, target_size, modulate_color)
+	return Rect2(center - target_size * 0.5, target_size)
 
 
 ## Draws `texture` centred on `center` at an exact size, for artwork whose aspect

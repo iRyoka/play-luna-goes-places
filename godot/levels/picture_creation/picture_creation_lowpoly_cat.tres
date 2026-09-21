@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://levels/picture_creation/picture_creation_configuration.gd" id="1_configuration"]
 [ext_resource type="Script" path="res://levels/picture_creation/picture_trace_stage.gd" id="2_trace"]
 [ext_resource type="Script" path="res://levels/picture_creation/picture_color_region.gd" id="3_region"]
-[ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/picture-nook-background.png" id="6_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/picture-nook-background.webp" id="6_background"]
 [ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/lowpoly-cat/cat_lowpoly_runtime_outline.svg" id="4_outline"]
 [ext_resource type="Texture2D" path="res://assets/gameplay/picture-creation/lowpoly-cat/cat_lowpoly_coloring_outline.svg" id="5_coloring_outline"]
 [sub_resource type="Resource" id="Region0"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://30lb6kio1blj"]
 
-[ext_resource type="Texture2D" uid="uid://2yawr1gtmqoh" path="res://assets/environments/chapter-02/map/chapter-background.png" id="1_background"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-02/map/chapter-background.webp" id="1_background"]
 [ext_resource type="Texture2D" uid="uid://2p6x1tp1dihy" path="res://assets/ui/map-level-buttons/level-button-available.png" id="2_marker"]
 
 [node name="Chapter02MarkerLayout" type="Node2D" unique_id=1711856847]

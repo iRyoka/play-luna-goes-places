@@ -552,10 +552,11 @@ func _focus_active_stage() -> void:
 	var stage := _trace_stages[_stage_index]
 	var focus_scale := _focus_scale_for(stage)
 	var target_position: Vector2 = _focus_position_for(stage, focus_scale)
+	var camera := _picture_camera()
 	var zoom := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	zoom.set_parallel(true)
-	zoom.tween_property(self, "scale", Vector2.ONE * focus_scale, BETWEEN_STAGE_ZOOM_DURATION)
-	zoom.tween_property(self, "position", target_position, BETWEEN_STAGE_ZOOM_DURATION)
+	zoom.tween_property(camera, "scale", Vector2.ONE * focus_scale, BETWEEN_STAGE_ZOOM_DURATION)
+	zoom.tween_property(camera, "position", target_position, BETWEEN_STAGE_ZOOM_DURATION)
 	await zoom.finished
 	_cue_suspended = false
 	_is_transitioning = false
@@ -568,18 +569,20 @@ func _focus_active_stage() -> void:
 func _zoom_out_between_stages() -> void:
 	_cue_suspended = true
 	queue_redraw()
+	var camera := _picture_camera()
 	var zoom := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	zoom.set_parallel(true)
-	zoom.tween_property(self, "scale", Vector2.ONE, BETWEEN_STAGE_ZOOM_DURATION)
-	zoom.tween_property(self, "position", Vector2.ZERO, BETWEEN_STAGE_ZOOM_DURATION)
+	zoom.tween_property(camera, "scale", Vector2.ONE, BETWEEN_STAGE_ZOOM_DURATION)
+	zoom.tween_property(camera, "position", Vector2.ZERO, BETWEEN_STAGE_ZOOM_DURATION)
 	await zoom.finished
 
 
 func _return_to_full_picture() -> void:
+	var camera := _picture_camera()
 	var zoom := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	zoom.set_parallel(true)
-	zoom.tween_property(self, "scale", Vector2.ONE, 0.42)
-	zoom.tween_property(self, "position", Vector2.ZERO, 0.42)
+	zoom.tween_property(camera, "scale", Vector2.ONE, 0.42)
+	zoom.tween_property(camera, "position", Vector2.ZERO, 0.42)
 	await zoom.finished
 	_cue_suspended = false
 	_is_coloring = true
@@ -589,8 +592,6 @@ func _return_to_full_picture() -> void:
 
 
 func _draw() -> void:
-	if configuration.background_art != null:
-		draw_texture_rect(configuration.background_art, Rect2(Vector2.ZERO, configuration.reference_size), false)
 	if configuration.paper_field_color.a > 0.0:
 		draw_rect(Rect2(Vector2.ZERO, configuration.reference_size), configuration.paper_field_color)
 	if configuration.base_art != null:
@@ -867,17 +868,22 @@ func _ordered_dashed_points(points: PackedVector2Array, origin_index: int, direc
 func _focus_scale_for(stage: PictureTraceStage) -> float:
 	var bounds := _trace_stage_bounds(stage)
 	var usable_size := _trace_safe_rect().size - Vector2.ONE * TRACE_FOCUS_MARKER_PADDING * 2.0
+	var cat_canvas := get_parent() as Node2D
+	var cat_scale := cat_canvas.scale.abs() if cat_canvas != null else Vector2.ONE
 	var scale := MAX_FOCUS_SCALE
 	if bounds.size.x > 0.0:
-		scale = minf(scale, usable_size.x / bounds.size.x)
+		scale = minf(scale, usable_size.x / (bounds.size.x * cat_scale.x))
 	if bounds.size.y > 0.0:
-		scale = minf(scale, usable_size.y / bounds.size.y)
+		scale = minf(scale, usable_size.y / (bounds.size.y * cat_scale.y))
 	return maxf(scale, 1.0)
 
 
 func _focus_position_for(stage: PictureTraceStage, focus_scale: float) -> Vector2:
 	var bounds := _trace_stage_bounds(stage)
-	return _trace_safe_rect().get_center() - bounds.get_center() * focus_scale
+	var cat_canvas := get_parent() as Node2D
+	var canvas_offset := cat_canvas.position if cat_canvas != null else Vector2.ZERO
+	var canvas_scale := cat_canvas.scale if cat_canvas != null else Vector2.ONE
+	return _trace_safe_rect().get_center() - (canvas_offset + bounds.get_center() * canvas_scale) * focus_scale
 
 
 func _trace_stage_bounds(stage: PictureTraceStage) -> Rect2:
@@ -897,12 +903,22 @@ func _trace_safe_rect() -> Rect2:
 
 
 func _screen_rect_to_local(screen_rect: Rect2) -> Rect2:
-	var screen_scale := _screen_scale()
-	return Rect2((screen_rect.position - position) / screen_scale, screen_rect.size / screen_scale)
+	var picture_viewport := _picture_viewport()
+	var local_start := to_local(picture_viewport.to_global(screen_rect.position))
+	var local_end := to_local(picture_viewport.to_global(screen_rect.end))
+	return Rect2(local_start, local_end - local_start)
 
 
 func _screen_scale() -> float:
-	return maxf(absf(scale.x), 0.01)
+	return maxf(global_transform.basis_xform(Vector2.RIGHT).length(), 0.01)
+
+
+func _picture_camera() -> Node2D:
+	return get_parent().get_parent() as Node2D
+
+
+func _picture_viewport() -> Node2D:
+	return _picture_camera().get_parent() as Node2D
 
 
 func _closed_polygon(polygon: PackedVector2Array) -> PackedVector2Array:

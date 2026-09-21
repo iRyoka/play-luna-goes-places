@@ -13,6 +13,11 @@ const SEGMENT_ADVANCE_DELAY := 0.55
 const COURSE_COMPLETION_DELAY := 0.9
 
 @export var course: TrailCourse
+@export var use_generated_ant := false
+@export var diagnostic_seed := -1
+var generation_signature := ""
+var generation_seed := -1
+static var _last_signature := ""
 
 @onready var trail_board: TrailBoard = %TrailBoard
 
@@ -30,6 +35,23 @@ func _ready() -> void:
 		push_error("Trail level %s has no authored course." % level_id)
 		trail_board.set_input_enabled(false)
 		return
+	if use_generated_ant:
+		generation_seed = diagnostic_seed if diagnostic_seed >= 0 else Time.get_ticks_usec()
+		var generated := GeneratedAntJourneyAssembler.assemble(generation_seed,course.get_stage(0))
+		for retry in range(8):
+			if diagnostic_seed >= 0 or String(generated.get("signature","")) != _last_signature: break
+			generation_seed += 104729
+			generated = GeneratedAntJourneyAssembler.assemble(generation_seed,course.get_stage(0))
+		if generated.course == null:
+			push_warning("Ant generation used the fixed diagnostic fallback.")
+			course = GeneratedAntJourneyAssembler.fallback(course.get_stage(0))
+		else:
+			course = generated.course
+			generation_signature = generated.signature
+		_last_signature = generation_signature
+		if course == null:
+			trail_board.set_input_enabled(false)
+			return
 	var errors := course.validate()
 	if not errors.is_empty():
 		for error in errors:
@@ -39,6 +61,7 @@ func _ready() -> void:
 	trail_board.actor_grabbed.connect(_on_actor_grabbed)
 	trail_board.segment_restarted.connect(_on_segment_restarted)
 	trail_board.segment_completed.connect(_on_segment_completed)
+	trail_board.checkpoint_revisited.connect(func(index: int) -> void: _segment_index = index)
 	trail_board.configure(course)
 
 
@@ -85,6 +108,10 @@ func _on_segment_completed(segment_index: int) -> void:
 	if stage == null:
 		return
 	if segment_index < stage.get_segment_count() - 1:
+		if stage.continuous_checkpoints:
+			_segment_index = segment_index + 1
+			trail_board.continue_through_checkpoint(_segment_index)
+			return
 		await get_tree().create_timer(SEGMENT_ADVANCE_DELAY).timeout
 		if not is_inside_tree():
 			return
@@ -99,6 +126,16 @@ func _on_segment_completed(segment_index: int) -> void:
 		if not is_inside_tree():
 			return
 		complete_level()
+		return
+	if stage.ant_journey != null and course.get_stage(_stage_index+1).ant_journey == stage.ant_journey:
+		if trail_board.is_pointer_pressed():
+			await trail_board.pointer_released
+		if not is_inside_tree(): return
+		await get_tree().create_timer(TrailBoard.ARRIVAL_GLIDE_SECONDS).timeout
+		if not is_inside_tree(): return
+		_stage_index += 1
+		_segment_index = 0
+		await trail_board.shift_to_stage(_stage_index)
 		return
 	# The journey moves on to a different place with a different actor, so this
 	# handover is a visible change of scene rather than a continuation.

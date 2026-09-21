@@ -99,7 +99,7 @@ const ARROW_FADE_SECONDS := 0.2
 ## soup puts its strip, so this one starts further left.
 const RECIPE_START := Vector2(600.0, 44.0)
 
-const BACKGROUND: Texture2D = preload("res://assets/gameplay/cooking/pizza/pizza-kitchen-background.png")
+const BACKGROUND: Texture2D = preload("res://assets/gameplay/cooking/pizza/pizza-kitchen-background.webp")
 const PIZZA_RAW: Texture2D = preload("res://assets/gameplay/cooking/pizza/pizza-raw.png")
 const PIZZA_SAUCE: Texture2D = preload("res://assets/gameplay/cooking/pizza/pizza-sauce.png")
 const PIZZA_CHEESE: Texture2D = preload("res://assets/gameplay/cooking/pizza/pizza-cheese.png")
@@ -233,22 +233,22 @@ func _process(delta: float) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			_begin_action(event.position)
+			_begin_action(_screen_to_reference(event.position))
 		else:
-			_finish_action(event.position)
+			_finish_action(_screen_to_reference(event.position))
 	elif event is InputEventMouseMotion:
-		_update_action(event.position)
+		_update_action(_screen_to_reference(event.position))
 	elif event is InputEventScreenTouch:
 		if not OS.has_feature("mobile"):
 			return
 		if event.pressed:
-			_begin_action(event.position)
+			_begin_action(_screen_to_reference(event.position))
 		else:
-			_finish_action(event.position)
+			_finish_action(_screen_to_reference(event.position))
 	elif event is InputEventScreenDrag:
 		if not OS.has_feature("mobile"):
 			return
-		_update_action(event.position)
+		_update_action(_screen_to_reference(event.position))
 
 
 func _begin_action(position: Vector2) -> void:
@@ -516,7 +516,10 @@ func _cheese_body_center() -> Vector2:
 
 
 func _draw() -> void:
-	draw_texture_rect(BACKGROUND, Rect2(Vector2.ZERO, size), false)
+	_draw_ambient_backdrop()
+	var transform := _board_transform()
+	draw_set_transform(transform["offset"] as Vector2, 0.0, Vector2.ONE * float(transform["scale"]))
+	draw_texture_rect(BACKGROUND, Rect2(Vector2.ZERO, CookingBoardViewport.REFERENCE_SIZE), false)
 	_draw_oven_glow()
 	_draw_oven_fire()
 	CookingRecipeStrip.draw_strip(self, RECIPE_START, RECIPE_ART, active_step, _cue_time)
@@ -526,6 +529,47 @@ func _draw() -> void:
 		_draw_drag_arrows()
 	if done_medallion_visible:
 		_draw_done_medallion()
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+func _board_transform() -> Dictionary:
+	return CookingBoardViewport.fit_transform(size)
+
+
+func _draw_ambient_backdrop() -> void:
+	# Keep the full authored kitchen readable while its enlarged, softened colours
+	# fill any letterbox space like a padded video rather than a flat empty field.
+	var backdrop_transform := CookingBoardViewport.cover_transform(size)
+	var backdrop_scale := float(backdrop_transform["scale"]) * 1.08
+	var backdrop_offset := (size - CookingBoardViewport.REFERENCE_SIZE * backdrop_scale) * 0.5
+	var blur_offsets: Array[Vector2] = [
+		Vector2(-12.0, 0.0), Vector2(12.0, 0.0),
+		Vector2(0.0, -8.0), Vector2(0.0, 8.0),
+		Vector2.ZERO,
+	]
+	for blur_offset: Vector2 in blur_offsets:
+		draw_set_transform(backdrop_offset + blur_offset, 0.0, Vector2.ONE * backdrop_scale)
+		draw_texture_rect(BACKGROUND, Rect2(Vector2.ZERO, CookingBoardViewport.REFERENCE_SIZE), false, Color(0.82, 0.67, 0.48, 0.26))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.20, 0.13, 0.09, 0.48))
+
+
+func _restore_board_transform() -> void:
+	_set_reference_draw_transform(Vector2.ZERO)
+
+
+func _set_reference_draw_transform(origin: Vector2, rotation := 0.0, local_scale := Vector2.ONE) -> void:
+	var transform := _board_transform()
+	var viewport_scale := float(transform["scale"])
+	draw_set_transform(
+		(transform["offset"] as Vector2) + origin * viewport_scale,
+		rotation,
+		local_scale * viewport_scale
+	)
+
+
+func _screen_to_reference(position: Vector2) -> Vector2:
+	return CookingBoardViewport.to_reference(position, _board_transform())
 
 
 func _fire_center() -> Vector2:
@@ -605,9 +649,9 @@ func _draw_placed_toppings(art: Dictionary[StringName, Texture2D]) -> void:
 
 func _draw_topping_piece(texture: Texture2D, center: Vector2, turned: float) -> void:
 	var width := texture.get_size().x * TOPPING_SCALE * _pizza_draw_scale
-	draw_set_transform(center, turned)
+	_set_reference_draw_transform(center, turned)
 	CookingDraw.texture_centered(self, texture, Vector2.ZERO, width)
-	draw_set_transform(Vector2.ZERO, 0.0)
+	_restore_board_transform()
 
 
 func _draw_counter_objects() -> void:
@@ -650,9 +694,9 @@ func _draw_drag_arrows() -> void:
 		var center := PIZZA_CENTER + direction * ARROW_DISTANCES[index]
 		# The chase lights one arrow at a time and rests a beat before repeating.
 		var texture := ARROW_FILLED if floori(_arrow_chase) == index else ARROW_EMPTY
-		draw_set_transform(center, angle)
+		_set_reference_draw_transform(center, angle)
 		CookingDraw.texture_centered(self, texture, Vector2.ZERO, ARROW_WIDTH, Color(1.0, 1.0, 1.0, _arrow_alpha))
-		draw_set_transform(Vector2.ZERO, 0.0)
+		_restore_board_transform()
 
 
 ## Draws `texture` masked to an ellipse, as one textured polygon.

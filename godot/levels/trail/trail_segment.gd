@@ -18,10 +18,6 @@ extends Resource
 ## stage authored rather than choosing its own.
 enum Containment { INHERIT, CONTAINED, RESTART_ON_EXIT }
 
-const TESSELLATION_SEGMENTS := 4
-const TESSELLATION_TOLERANCE_DEGREES := 3.0
-const SMOOTHING_TANGENT_SCALE := 0.25
-
 ## Overrides the stage's containment for this leg alone. Leave it on INHERIT,
 ## which is what keeps play inside a stage homogeneous; set it only for a leg
 ## that genuinely needs a different rule from the rest of its stage.
@@ -47,25 +43,30 @@ const SMOOTHING_TANGENT_SCALE := 0.25
 	set(value):
 		path_width = value
 		_invalidate()
+## Optional per-sample widths for a phrase derived from its painted support.
+## Empty preserves the authored constant-width corridor used by older courses.
+@export var width_samples := PackedFloat32Array()
+## A phrase is painted as one compact source image rather than shredding it into
+## straight span textures. Only its first split segment draws this surface.
+@export var phrase_texture: Texture2D
+@export var phrase_position := Vector2.ZERO
+@export var phrase_scale := 1.0
+@export var phrase_mirrored := false
 @export var smooth := true:
 	set(value):
 		smooth = value
 		_invalidate()
 
-var _polyline := PackedVector2Array()
-var _distances := PackedFloat32Array()
+var _guided_path: GuidedPath
+var global_start_distance := 0.0
 
 
 func get_polyline() -> PackedVector2Array:
-	_ensure_polyline()
-	return _polyline
+	return _path().get_polyline()
 
 
 func get_length() -> float:
-	_ensure_polyline()
-	if _distances.is_empty():
-		return 0.0
-	return _distances[_distances.size() - 1]
+	return _path().get_length()
 
 
 func get_start_point() -> Vector2:
@@ -81,21 +82,31 @@ func get_end_point() -> Vector2:
 
 
 func point_at_distance(distance: float) -> Vector2:
-	_ensure_polyline()
-	if _polyline.is_empty():
-		return Vector2.ZERO
-	var target := clampf(distance, 0.0, get_length())
-	for index in range(1, _polyline.size()):
-		if target > _distances[index]:
-			continue
-		var segment_length := _distances[index] - _distances[index - 1]
-		if segment_length <= 0.0:
-			return _polyline[index]
-		var fraction := (target - _distances[index - 1]) / segment_length
-		return _polyline[index - 1].lerp(_polyline[index], fraction)
-	return _polyline[_polyline.size() - 1]
+	return _path().point_at_distance(distance)
 
 
+func get_width_at_distance(distance: float) -> float:
+	# Width samples belong to the finished polyline, never to sparse controls
+	# that smoothing expands into a differently sized array.
+	var polyline := get_polyline()
+	if width_samples.size() != polyline.size() or width_samples.is_empty():
+		return path_width
+	distance = clampf(distance, 0.0, get_length())
+	var covered := 0.0
+	for index in range(1, polyline.size()):
+		var span := polyline[index - 1].distance_to(polyline[index])
+		if span > 0.0 and covered + span >= distance:
+			var fraction := inverse_lerp(covered, covered + span, distance)
+			return lerpf(width_samples[index - 1], width_samples[index], fraction)
+		covered += span
+	return width_samples[width_samples.size() - 1]
+
+
+func get_half_width_at_distance(distance: float) -> float:
+	return get_width_at_distance(distance) * 0.5
+
+
+## Preserve the constant-width API used by authored Bee courses and tests.
 func get_half_width() -> float:
 	return path_width * 0.5
 
@@ -103,21 +114,7 @@ func get_half_width() -> float:
 ## Direction of travel at `distance`, used to resolve how far the actor sits to
 ## the side of the centre-line.
 func tangent_at_distance(distance: float) -> Vector2:
-	_ensure_polyline()
-	if _polyline.size() < 2:
-		return Vector2.RIGHT
-	var target := clampf(distance, 0.0, get_length())
-	for index in range(1, _polyline.size()):
-		if target > _distances[index]:
-			continue
-		var direction := _polyline[index] - _polyline[index - 1]
-		if direction.length_squared() > 0.0:
-			return direction.normalized()
-	for index in range(_polyline.size() - 1, 0, -1):
-		var direction := _polyline[index] - _polyline[index - 1]
-		if direction.length_squared() > 0.0:
-			return direction.normalized()
-	return Vector2.RIGHT
+	return _path().tangent_at_distance(distance)
 
 
 func normal_at_distance(distance: float) -> Vector2:
@@ -128,57 +125,14 @@ func normal_at_distance(distance: float) -> Vector2:
 ## `search_center`. The window keeps a stray finger from teleporting the actor
 ## across a fold of its own route.
 func project_distance(point: Vector2, search_center: float, search_radius: float) -> float:
-	_ensure_polyline()
-	if _polyline.size() < 2:
-		return 0.0
-	var window_start := clampf(search_center - search_radius, 0.0, get_length())
-	var window_end := clampf(search_center + search_radius, 0.0, get_length())
-	var best_distance := clampf(search_center, window_start, window_end)
-	var best_squared := point.distance_squared_to(point_at_distance(best_distance))
-	for index in range(1, _polyline.size()):
-		if _distances[index] < window_start or _distances[index - 1] > window_end:
-			continue
-		var segment := _polyline[index] - _polyline[index - 1]
-		var segment_length := segment.length()
-		if segment_length <= 0.0:
-			continue
-		var along := (point - _polyline[index - 1]).dot(segment) / (segment_length * segment_length)
-		var candidate := _distances[index - 1] + clampf(along, 0.0, 1.0) * segment_length
-		candidate = clampf(candidate, window_start, window_end)
-		var candidate_squared := point.distance_squared_to(point_at_distance(candidate))
-		if candidate_squared < best_squared:
-			best_squared = candidate_squared
-			best_distance = candidate
-	return best_distance
+	return _path().project_distance(point, search_center, search_radius)
 
 
 func _invalidate() -> void:
-	_polyline = PackedVector2Array()
-	_distances = PackedFloat32Array()
+	_guided_path = null
 
 
-func _ensure_polyline() -> void:
-	if not _polyline.is_empty():
-		return
-	if points.size() < 2:
-		_polyline = points.duplicate()
-		_distances = PackedFloat32Array()
-		if _polyline.size() == 1:
-			_distances.append(0.0)
-		return
-	_polyline = _build_smooth_polyline() if smooth else points.duplicate()
-	_distances = PackedFloat32Array()
-	_distances.resize(_polyline.size())
-	_distances[0] = 0.0
-	for index in range(1, _polyline.size()):
-		_distances[index] = _distances[index - 1] + _polyline[index - 1].distance_to(_polyline[index])
-
-
-func _build_smooth_polyline() -> PackedVector2Array:
-	var curve := Curve2D.new()
-	for index in range(points.size()):
-		var previous := points[maxi(index - 1, 0)]
-		var next := points[mini(index + 1, points.size() - 1)]
-		var tangent := (next - previous) * SMOOTHING_TANGENT_SCALE
-		curve.add_point(points[index], -tangent, tangent)
-	return curve.tessellate(TESSELLATION_SEGMENTS, TESSELLATION_TOLERANCE_DEGREES)
+func _path() -> GuidedPath:
+	if _guided_path == null:
+		_guided_path = GuidedPath.new(points, smooth)
+	return _guided_path

@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://levels/picture_creation/picture_creation.gd" id="1_level"]
 [ext_resource type="Script" path="res://levels/picture_creation/picture_creation_board.gd" id="2_board"]
+[ext_resource type="Script" path="res://levels/picture_creation/picture_creation_viewport.gd" id="6_viewport"]
+[ext_resource type="Script" path="res://levels/picture_creation/picture_creation_backdrop.gd" id="7_backdrop"]
+[ext_resource type="Script" path="res://levels/picture_creation/picture_creation_cat_canvas.gd" id="8_cat_canvas"]
 [ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="3_back"]
 [ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="4_completion"]
 [ext_resource type="Resource" path="res://levels/picture_creation/picture_creation_lowpoly_cat.tres" id="5_configuration"]
@@ -27,7 +30,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PictureBoard" type="Node2D" parent="Gameplay"]
+[node name="PictureViewport" type="Node2D" parent="Gameplay"]
+script = ExtResource("6_viewport")
+
+[node name="PictureCamera" type="Node2D" parent="Gameplay/PictureViewport"]
+
+[node name="PictureBackdrop" type="Node2D" parent="Gameplay/PictureViewport/PictureCamera"]
+script = ExtResource("7_backdrop")
+
+[node name="CatCanvas" type="Node2D" parent="Gameplay/PictureViewport/PictureCamera"]
+script = ExtResource("8_cat_canvas")
+
+[node name="PictureBoard" type="Node2D" parent="Gameplay/PictureViewport/PictureCamera/CatCanvas"]
 unique_name_in_owner = true
 script = ExtResource("2_board")
 configuration = ExtResource("5_configuration")

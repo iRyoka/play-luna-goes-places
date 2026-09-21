@@ -5,7 +5,7 @@ signal last_played_level_changed(level_id: StringName)
 signal music_enabled_changed(enabled: bool)
 signal sound_effects_enabled_changed(enabled: bool)
 
-const CURRENT_SCHEMA_VERSION := 3
+const CURRENT_SCHEMA_VERSION := 4
 const DEFAULT_STORAGE_PATH := "user://game_state.cfg"
 
 var music_enabled := true
@@ -154,7 +154,7 @@ func _read_snapshot(path: String) -> Dictionary:
 
 
 func _snapshot_from_config(config: ConfigFile, version: int) -> Dictionary:
-	if version != 1 and version != 2 and version != 3:
+	if version != 1 and version != 2 and version != 3 and version != 4:
 		return {}
 	var required_keys: Array[PackedStringArray] = [
 		PackedStringArray(["progress", "completed_level_ids"]),
@@ -163,7 +163,7 @@ func _snapshot_from_config(config: ConfigFile, version: int) -> Dictionary:
 	]
 	if version == 1:
 		required_keys.append(PackedStringArray(["preferences", "vibration_enabled"]))
-	if version == 3:
+	if version >= 3:
 		required_keys.append(PackedStringArray(["progress", "last_played_level_id"]))
 	for section_and_key: PackedStringArray in required_keys:
 		if not config.has_section_key(section_and_key[0], section_and_key[1]):
@@ -179,7 +179,7 @@ func _snapshot_from_config(config: ConfigFile, version: int) -> Dictionary:
 	if version == 1 and typeof(config.get_value("preferences", "vibration_enabled")) != TYPE_BOOL:
 		return {}
 	var last_played_id := ""
-	if version == 3:
+	if version >= 3:
 		var last_played_value: Variant = config.get_value("progress", "last_played_level_id")
 		if typeof(last_played_value) != TYPE_STRING:
 			return {}
@@ -203,6 +203,12 @@ func _migrate_snapshot(snapshot: Dictionary, stored_version: int) -> Dictionary:
 				migrated.erase("vibration_enabled")
 			2:
 				migrated["last_played_level_id"] = ""
+			3:
+				# Flower Planters is retained as a ghost scene, not playable content.
+				# Its historical completion stays intact, while its route reference moves
+				# to Chapter 1's stable entry point.
+				if migrated["last_played_level_id"] == "chapter_01/numbers":
+					migrated["last_played_level_id"] = "chapter_01/drag_match"
 			_:
 				return {}
 		version += 1

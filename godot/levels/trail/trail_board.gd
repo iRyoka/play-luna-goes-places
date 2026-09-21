@@ -16,11 +16,15 @@ extends Control
 signal actor_grabbed
 signal segment_restarted
 signal segment_completed(segment_index: int)
+signal pointer_released
+signal checkpoint_revisited(segment_index: int)
 
 ## Largest jump along the route one pointer update may cause.
 const MAX_PROJECTION_STEP := 460.0
 ## Seconds the actor takes to glide onto its marker once it has arrived.
 const ARRIVAL_GLIDE_SECONDS := 0.18
+const CHECKPOINT_APPROACH_DISTANCE := 220.0
+const CHECKPOINT_BOUNCE_SECONDS := 0.42
 ## A press is accepted well away from the actor, so the actor keeps that distance
 ## at first and then closes it, arriving under the finger without a jump.
 const GRAB_OFFSET_DECAY := 0.82
@@ -36,6 +40,7 @@ const CORRIDOR_OBJECT_OVERLAP := 12.0
 
 ## Movement below this in one frame is the actor standing still, not a heading.
 const MIN_TURN_MOVEMENT := 1.5
+const REFERENCE_SIZE := Vector2(2160.0, 1080.0)
 
 const START_MARKER_COLOR := Color(0.75, 0.82, 0.63)
 const GOAL_PETAL_COLOR := Color(0.93, 0.46, 0.56)
@@ -74,6 +79,12 @@ var _frame_elapsed := 0.0
 var _facing_angle := 0.0
 var _last_actor_position := Vector2.ZERO
 var _has_last_position := false
+var _pointer_pressed := false
+var _pan_origin := 0.0
+var _pan_from := 0.0
+var _pan_to := 0.0
+var _pan_inertia := 0.0
+var _glow_time := 0.0
 
 
 func _ready() -> void:
@@ -89,6 +100,7 @@ func configure(trail_course: TrailCourse) -> void:
 ## this is a visible cut rather than a continuation.
 func set_active_stage(index: int) -> void:
 	_stage_index = index
+	_pan_origin = _current_stage().view_origin
 	set_active_segment(0)
 
 
@@ -108,6 +120,23 @@ func set_active_segment(index: int) -> void:
 	if segment != null:
 		_facing_angle = segment.tangent_at_distance(0.0).angle()
 	_update_processing()
+	queue_redraw()
+
+
+## Advances across a visible internal checkpoint without taking the held drag
+## away. The two runs share their endpoint, so the actor remains exactly where
+## the child left it while the active recovery checkpoint changes.
+func continue_through_checkpoint(index: int) -> void:
+	_segment_index = index
+	_distance = 0.0
+	_lateral = 0.0
+	_segment_resolved = false
+	_off_route = false
+	_exit_armed = true
+	# Internal checkpoints have no arrival glide: their shared endpoint is already
+	# under the actor, and a pending settle would overwrite the next leg's travel.
+	_settling = false
+	_has_last_position = false
 	queue_redraw()
 
 
@@ -142,7 +171,11 @@ func get_actor_position() -> Vector2:
 	var segment := _current_segment()
 	if segment == null:
 		return Vector2.ZERO
-	return segment.point_at_distance(_distance) + segment.normal_at_distance(_distance) * _lateral
+	var position := segment.point_at_distance(_distance) + segment.normal_at_distance(_distance) * _lateral
+	var stage := _current_stage()
+	if stage.ant_journey != null:
+		position.x += stage.view_origin - _pan_origin + _pan_inertia
+	return position
 
 
 ## True while the actor is outside its corridor, or while a contained actor is
@@ -155,7 +188,10 @@ func is_actor_outside_corridor() -> bool:
 	var segment := _current_segment()
 	if segment == null:
 		return false
-	return absf(_lateral) > segment.get_half_width()
+	var stage := _current_stage()
+	if stage.ant_journey != null:
+		return not stage.ant_journey.is_walkable(get_actor_position()+Vector2(_pan_origin,0)-AntJourney.SCREEN_ORIGIN,false)
+	return absf(_lateral) > segment.get_half_width_at_distance(_distance)
 
 
 func is_dragging() -> bool:
@@ -167,26 +203,33 @@ func is_settling() -> bool:
 
 
 func _gui_input(event: InputEvent) -> void:
+	# A handover locks movement, not the release needed to leave its rest point.
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		_finish_action(_screen_to_reference(event.position))
+		return
+	if event is InputEventScreenTouch and not event.pressed and OS.has_feature("mobile"):
+		_finish_action(_screen_to_reference(event.position))
+		return
 	if not _input_enabled:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			_begin_action(event.position)
+			_begin_action(_screen_to_reference(event.position))
 		else:
-			_finish_action(event.position)
+			_finish_action(_screen_to_reference(event.position))
 	elif event is InputEventMouseMotion:
-		_update_action(event.position)
+		_update_action(_screen_to_reference(event.position))
 	elif event is InputEventScreenTouch:
 		if not OS.has_feature("mobile"):
 			return
 		if event.pressed:
-			_begin_action(event.position)
+			_begin_action(_screen_to_reference(event.position))
 		else:
-			_finish_action(event.position)
+			_finish_action(_screen_to_reference(event.position))
 	elif event is InputEventScreenDrag:
 		if not OS.has_feature("mobile"):
 			return
-		_update_action(event.position)
+		_update_action(_screen_to_reference(event.position))
 
 
 func _begin_action(position: Vector2) -> void:
@@ -196,6 +239,7 @@ func _begin_action(position: Vector2) -> void:
 	var actor_position := get_actor_position()
 	if position.distance_to(actor_position) > course.actor_capture_radius:
 		return
+	_pointer_pressed = true
 	_dragging = true
 	_settling = false
 	_exit_armed = false
@@ -225,13 +269,21 @@ func _update_action(position: Vector2) -> void:
 	if not _dragging:
 		# The segment restarted under this update.
 		return
+	segment = _current_segment()
 	# Arriving is generous: an actor carried along the corridor wall reaches its
 	# marker without being steered onto the last point of the centre-line.
-	if _distance >= segment.get_length() - course.goal_reach and not is_actor_outside_corridor():
+	var reach := course.goal_reach
+	if _current_stage().ant_journey != null and _segment_index < _current_stage().get_segment_count()-1:
+		reach = 1.0
+	if _distance >= segment.get_length() - reach and not is_actor_outside_corridor():
 		_resolve_segment(segment)
+		if _dragging and _current_stage().ant_journey != null and _current_segment() != segment:
+			_apply_target(_current_segment(),position+_grab_offset)
 
 
 func _finish_action(position: Vector2) -> void:
+	_pointer_pressed = false
+	pointer_released.emit()
 	if not _dragging:
 		return
 	_update_action(position)
@@ -243,6 +295,10 @@ func _finish_action(position: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	var busy := false
+	if _current_stage() != null and _current_stage().ant_journey != null and _input_enabled:
+		_glow_time += delta
+		queue_redraw()
+		busy = true
 	if _settling:
 		_advance_settle(delta)
 		busy = true
@@ -331,7 +387,8 @@ func _advance_facing(delta: float) -> void:
 
 
 func _update_processing() -> void:
-	set_process(_settling or _is_animating() or _turns_actor())
+	var glowing := _input_enabled and _current_stage() != null and _current_stage().ant_journey != null
+	set_process(_settling or _is_animating() or _turns_actor() or glowing)
 
 
 func _current_stage() -> TrailStage:
@@ -353,9 +410,16 @@ func _apply_target(segment: TrailSegment, target: Vector2) -> void:
 	var stage := _current_stage()
 	if stage == null:
 		return
-	var half_width := segment.get_half_width()
 	var actor_radius := stage.actor_radius
 	var candidate := segment.project_distance(target, _distance, MAX_PROJECTION_STEP)
+	if stage.ant_journey != null and _segment_index > 0 and candidate < 1.0:
+		if (target-segment.get_start_point()).dot(segment.tangent_at_distance(0)) < -4:
+			_segment_index -= 1
+			segment = _current_segment()
+			_distance = segment.get_length()
+			candidate = segment.project_distance(target,_distance,MAX_PROJECTION_STEP)
+			checkpoint_revisited.emit(_segment_index)
+	var half_width := segment.get_half_width_at_distance(candidate)
 	var lateral := _lateral_at(segment, candidate, target)
 	if stage.resolve_containment(segment) == TrailSegment.Containment.RESTART_ON_EXIT:
 		_distance = candidate
@@ -364,11 +428,20 @@ func _apply_target(segment: TrailSegment, target: Vector2) -> void:
 		# It sits outside the visible edge, so the actor is seen to leave the route
 		# before it is sent back: the rule is never harsher than the picture.
 		var outside := absf(_lateral) > half_width + course.off_route_tolerance
+		if stage.ant_journey != null:
+			var point := segment.point_at_distance(candidate)+segment.normal_at_distance(candidate)*lateral
+			var offset := Vector2(stage.view_origin,0)-AntJourney.SCREEN_ORIGIN
+			# A far-away pointer can project onto a bend with almost zero lateral
+			# offset. Discarding its longitudinal residual would falsely advance it.
+			outside = not stage.ant_journey.is_walkable(target+offset,true) or not stage.ant_journey.is_walkable(point+offset,true)
 		# A press that begins outside the corridor must not restart the segment
 		# before the actor has been inside it once.
 		if outside and _exit_armed:
 			_restart_segment()
 			return
+		if stage.ant_journey != null and not outside:
+			stage.ant_journey.passed_distance = maxf(stage.ant_journey.passed_distance,segment.global_start_distance+candidate)
+			_record_checkpoint_passes(stage.ant_journey)
 		_exit_armed = _exit_armed or not outside
 		_off_route = outside
 	else:
@@ -395,7 +468,8 @@ func _resolve_segment(segment: TrailSegment) -> void:
 	if _segment_resolved:
 		return
 	_segment_resolved = true
-	_dragging = false
+	if not _current_stage().continuous_checkpoints or _segment_index >= _current_stage().get_segment_count() - 1:
+		_dragging = false
 	_off_route = false
 	# The actor glides the last of the way onto its marker, well inside the pause
 	# before the next segment appears.
@@ -431,14 +505,27 @@ func _start_settle(target_distance: float, target_lateral: float, duration: floa
 
 
 func _draw() -> void:
+	_set_reference_draw_transform(Vector2.ZERO)
 	var stage := _current_stage()
 	_draw_background(stage)
 	if stage == null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		return
+	if stage.ant_journey != null:
+		_draw_ant_journey(stage)
+		var ant_segment := _current_segment()
+		if ant_segment != null:
+			_draw_route_hint(ant_segment)
+			_draw_actor(stage,ant_segment)
+			if _segment_resolved and _stage_index < course.get_stage_count()-1:
+				draw_arc(get_actor_position(),100,0,TAU,48,Color(1,1,1,0.3),5,true)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		return
 	if stage.draw_corridor_overlay:
 		_draw_stage_corridor(stage)
 	var segment := stage.get_segment(_segment_index)
 	if segment == null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		return
 	# Progress is marked whatever the route is drawn from, because it is feedback
 	# rather than scenery. A stage that does not want it authors a transparent
@@ -464,15 +551,147 @@ func _draw() -> void:
 	)
 	_draw_route_hint(segment)
 	_draw_actor(stage, segment)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 func _draw_background(stage: TrailStage) -> void:
+	if stage != null and stage.ant_journey != null and stage.ant_journey.background != null:
+		draw_texture_rect(stage.ant_journey.background,Rect2(Vector2(-_pan_origin,0),Vector2(5760,1080)),false)
+		return
 	var background := stage.background if stage != null else null
 	if background != null:
-		draw_texture_rect(background, Rect2(Vector2.ZERO, size), false)
+		draw_texture_rect(background, Rect2(Vector2.ZERO, REFERENCE_SIZE), false)
 		return
 	var fallback := course.placeholder_background_color if course != null else Color.WHITE
-	draw_rect(Rect2(Vector2.ZERO, size), fallback)
+	draw_rect(Rect2(Vector2.ZERO, REFERENCE_SIZE), fallback)
+
+
+func _board_transform() -> Dictionary:
+	var viewport_size := size if size != Vector2.ZERO else REFERENCE_SIZE
+	var scale_factor := maxf(viewport_size.x / REFERENCE_SIZE.x, viewport_size.y / REFERENCE_SIZE.y)
+	return {"offset": (viewport_size - REFERENCE_SIZE * scale_factor) * 0.5, "scale": scale_factor}
+
+
+func _screen_to_reference(position: Vector2) -> Vector2:
+	var transform := _board_transform()
+	return (position - (transform["offset"] as Vector2)) / float(transform["scale"])
+
+
+func _set_reference_draw_transform(origin: Vector2, rotation := 0.0, local_scale := Vector2.ONE) -> void:
+	var transform := _board_transform()
+	var viewport_scale := float(transform["scale"])
+	draw_set_transform(
+		(transform["offset"] as Vector2) + origin * viewport_scale,
+		rotation,
+		local_scale * viewport_scale
+	)
+
+
+func is_pointer_pressed() -> bool:
+	return _pointer_pressed
+
+
+func shift_to_stage(index: int) -> void:
+	_input_enabled = false
+	_pan_from = _pan_origin
+	_pan_to = course.get_stage(index).view_origin
+	var tween := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_method(_set_pan_fraction,0.0,1.0,course.stage_handover_duration)
+	await tween.finished
+	_pan_inertia = 0
+	set_active_stage(index)
+	_distance = minf(18.0,_current_segment().get_length())
+	_input_enabled = true
+	_update_processing()
+	queue_redraw()
+
+
+func _set_pan_fraction(fraction: float) -> void:
+	_pan_origin = lerpf(_pan_from,_pan_to,fraction)
+	_pan_inertia = 18*fraction
+	queue_redraw()
+
+
+func _draw_ant_journey(stage: TrailStage) -> void:
+	var journey := stage.ant_journey
+	var offset := AntJourney.SCREEN_ORIGIN-Vector2(_pan_origin,0)
+	for tile: Dictionary in journey.tiles:
+		var position: Vector2 = tile.offset+offset
+		var tile_size: Vector2 = tile.size
+		if not Rect2(position,tile_size).intersects(Rect2(Vector2.ZERO,REFERENCE_SIZE)): continue
+		var scale := Vector2.ONE
+		if tile.orientation in ["T-R","B-R"]:
+			position.x += tile_size.x
+			scale.x = -1
+		if tile.orientation in ["T-R","L-T","L-R-flip"]:
+			position.y += tile_size.y
+			scale.y = -1
+		_set_reference_draw_transform(position, 0.0, scale)
+		draw_texture_rect(tile.texture,Rect2(Vector2.ZERO,tile_size),false)
+		_set_reference_draw_transform(Vector2.ZERO)
+	for cover: Dictionary in journey.covers:
+		_draw_ant_sprite(cover,cover.position+offset,0.5,cover.angle,Color.WHITE)
+	for marker: Dictionary in journey.markers:
+		var point: Vector2 = marker.position+offset
+		if point.x < -220 or point.x > REFERENCE_SIZE.x+220: continue
+		var objective := bool(marker.objective)
+		if objective:
+			var halo := _objective_glow()
+			_draw_berry_glow(point,halo.radius,halo.color,true)
+			_draw_ant_sprite(marker,point,1.0,0,Color.WHITE)
+		else:
+			var feedback := _checkpoint_feedback(marker,journey)
+			if not feedback.passed:
+				_draw_berry_glow(point,feedback.halo_radius,Color(1,0.86,0.42,feedback.halo_alpha),true)
+			_draw_ant_sprite(marker,point+feedback.offset,0.5*feedback.scale,0,feedback.tint)
+
+
+func _objective_glow() -> Dictionary:
+	var pulse := (1+sin(TAU*_glow_time/3))/2
+	# The double-size fruit needs visible light beyond its opaque body.
+	return {"radius":210+18*pulse,
+		"color":Color.from_hsv(fmod(_glow_time/9,1.0),0.55,1,0.48+0.16*pulse)}
+
+
+func _record_checkpoint_passes(journey: AntJourney) -> void:
+	for marker: Dictionary in journey.markers:
+		var distance := float(marker.distance)
+		if marker.objective or journey.passed_distance+1<distance: continue
+		if not journey.checkpoint_pass_times.has(distance):
+			journey.checkpoint_pass_times[distance]=_glow_time
+
+
+func _checkpoint_feedback(marker: Dictionary,journey: AntJourney) -> Dictionary:
+	var distance := float(marker.distance)
+	var passed := journey.passed_distance+1>=distance
+	if passed:
+		var elapsed := maxf(0,_glow_time-float(journey.checkpoint_pass_times.get(distance,-100.0)))
+		var bounce := sin(PI*clampf(elapsed/CHECKPOINT_BOUNCE_SECONDS,0,1))
+		return {"passed":true,"approach":0.0,"halo_radius":0.0,"halo_alpha":0.0,
+			"scale":1+0.16*bounce,"offset":Vector2(0,-14*bounce),"tint":Color(0.55,0.58,0.52,1)}
+	var segment := _current_segment()
+	var remaining := distance-(segment.global_start_distance+_distance)
+	# Arc distance avoids reacting to a nearby but unrelated arm of a snake.
+	var approach := smoothstep(CHECKPOINT_APPROACH_DISTANCE,0.0,maxf(remaining,0.0))
+	var breath := (1+sin(TAU*_glow_time/2.8))/2
+	return {"passed":false,"approach":approach,"halo_radius":105+6*breath+14*approach,
+		"halo_alpha":0.34+0.08*breath+0.18*approach,
+		"scale":1+0.10*approach,"offset":Vector2.ZERO,"tint":Color.WHITE}
+
+
+func _draw_ant_sprite(record: Dictionary,position: Vector2,scale: float,angle: float,color: Color) -> void:
+	var texture: Texture2D = record.texture
+	_set_reference_draw_transform(position, angle, Vector2.ONE * scale)
+	draw_texture_rect(texture,Rect2(-Vector2(record.anchor),texture.get_size()),false,color)
+	_set_reference_draw_transform(Vector2.ZERO)
+
+
+func _draw_berry_glow(position: Vector2,radius: float,color: Color,checkpoint_halo := false) -> void:
+	for layer in range(16,0,-1):
+		var fraction := float(layer)/16
+		var tint := color
+		tint.a *= (1-fraction)/4 if checkpoint_halo else (1-fraction)*(1-fraction)/3
+		draw_circle(position,radius*fraction,tint)
 
 
 ## A quiet line back toward the route. It carries no sound or colour change: it
@@ -512,7 +731,9 @@ func _draw_stage_corridor(stage: TrailStage) -> void:
 		if segment == null:
 			continue
 		var texture := stage.get_corridor_texture(segment)
-		if texture != null:
+		if segment.phrase_texture != null:
+			_draw_phrase_surface(segment)
+		elif texture != null:
 			_draw_corridor_objects(segment, texture)
 		elif index < _segment_index:
 			_draw_corridor_fill(
@@ -535,9 +756,24 @@ func _draw_corridor_objects(segment: TrailSegment, texture: Texture2D) -> void:
 		if length <= 0.0:
 			continue
 		var drawn := Vector2(length + CORRIDOR_OBJECT_OVERLAP * 2.0, segment.path_width)
-		draw_set_transform((from + to) * 0.5, span.angle(), Vector2.ONE)
+		_set_reference_draw_transform((from + to) * 0.5, span.angle())
 		draw_texture_rect(texture, Rect2(-drawn * 0.5, drawn), false)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		_set_reference_draw_transform(Vector2.ZERO)
+
+
+func _draw_phrase_surface(segment: TrailSegment) -> void:
+	var texture := segment.phrase_texture
+	if texture == null:
+		return
+	var drawn := texture.get_size() * segment.phrase_scale
+	if segment.phrase_mirrored:
+		_set_reference_draw_transform(
+			segment.phrase_position + Vector2(0.0, drawn.y), 0.0, Vector2(1.0, -1.0)
+		)
+		draw_texture_rect(texture, Rect2(Vector2.ZERO, drawn), false)
+		_set_reference_draw_transform(Vector2.ZERO)
+		return
+	draw_texture_rect(texture, Rect2(segment.phrase_position, drawn), false)
 
 
 func _draw_corridor_fill(segment: TrailSegment, edge_color: Color, fill_color: Color) -> void:
@@ -574,7 +810,7 @@ func _draw_travelled(stage: TrailStage, segment: TrailSegment) -> void:
 	travelled.append(segment.point_at_distance(_distance))
 	if travelled.size() < 2:
 		return
-	_draw_corridor(travelled, segment.path_width * 0.42, stage.travelled_color)
+	_draw_corridor(travelled, segment.get_width_at_distance(_distance) * 0.42, stage.travelled_color)
 
 
 ## Draws one marker: its artwork when the stage supplies it, and the placeholder
@@ -666,9 +902,9 @@ func _draw_texture_centered(
 	# thing whatever aspect its picture happens to have.
 	var fit_scale := radius * 2.0 / texture_size.x
 	var drawn := texture_size * fit_scale
-	draw_set_transform(center, angle, Vector2(1.0, -1.0 if mirrored else 1.0))
+	_set_reference_draw_transform(center, angle, Vector2(1.0, -1.0 if mirrored else 1.0))
 	draw_texture_rect(texture, Rect2(-drawn * 0.5, drawn), false)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	_set_reference_draw_transform(Vector2.ZERO)
 
 
 func _draw_placeholder_actor(center: Vector2, radius: float) -> void:

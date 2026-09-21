@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cef6vjil0sseq" path="res://levels/puzzle_assembly/puzzle_board.gd" id="1_board"]
 [ext_resource type="Script" uid="uid://dyi41gopoh7kk" path="res://levels/puzzle_assembly/puzzle_stage.gd" id="2_stage"]
 [ext_resource type="Script" uid="uid://bnbofp2yileh1" path="res://levels/puzzle_assembly/puzzle_part.gd" id="3_part"]
-[ext_resource type="Texture2D" uid="uid://skslru16h7ik" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.png" id="4_background"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/puzzle-assembly/old-tbilisi-puppet-theatre-background.webp" id="4_background"]
 [ext_resource type="Texture2D" uid="uid://d1r24o73ngcrq" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-theatre-base-sliced.png" id="5_base"]
 [ext_resource type="Texture2D" uid="uid://xqwihpc65akc" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-clock-tower-sliced.png" id="6_tower"]
 [ext_resource type="Texture2D" uid="uid://ctphaw4xo8ymr" path="res://assets/gameplay/puzzle-assembly/old-tbilisi-puppet-theatre-left-wing-sliced.png" id="7_left_wing"]
@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dtrsfi6aaw1fr" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-sheep-sliced.png" id="14_barn_sheep"]
 [ext_resource type="Texture2D" uid="uid://wygdfkn56xqy" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-jar-sliced.png" id="15_barn_jar"]
 [ext_resource type="Texture2D" uid="uid://dthbjmdbuhy12" path="res://assets/gameplay/puzzle-assembly/kakheti-barn-backing-sliced.png" id="16_barn_backing"]
-[ext_resource type="Texture2D" uid="uid://c6x5frblrbo2d" path="res://assets/environments/chapter-01/puzzle-assembly/kakheti-barn-background.png" id="17_barn_background"]
+[ext_resource type="Texture2D" path="res://assets/environments/chapter-01/puzzle-assembly/kakheti-barn-background.webp" id="17_barn_background"]
 
 [sub_resource type="Resource" id="Resource_theatre_base"]
 script = ExtResource("3_part")

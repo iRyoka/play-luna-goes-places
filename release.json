@@ -1,19 +1,19 @@
 {
-    "version":  "0.3.0",
-    "source_tag":  "0.3.0",
-    "source_commit":  "52647f74007e48c1acac462360ad6191d3bbb4e4",
-    "template_commit":  "c585adb5c7767e831e6133c3f42cc27e2027d0eb",
-    "android_version_code":  3000,
+    "version":  "0.4.0",
+    "source_tag":  "0.4.0",
+    "source_commit":  "3c4b4d077e51e72633186dfddb6b425f3ba4d571",
+    "template_commit":  "3c4b4d077e51e72633186dfddb6b425f3ba4d571",
+    "android_version_code":  4000,
     "artifacts":  {
                       "apk":  {
-                                  "name":  "luna-goes-places-0.3.0.apk",
-                                  "sha256":  "423e6d3912d114dd02e2c46f0d2539f15437e45135edcf36cdffd3162b77b481",
-                                  "bytes":  111915317
+                                  "name":  "luna-goes-places-0.4.0.apk",
+                                  "sha256":  "60136f7e94d8e744af53dc7b1aa60fca6d77d280cd616ee1c4a60508e95efd7a",
+                                  "bytes":  144030981
                               },
                       "web":  {
-                                  "name":  "luna-goes-places-web-0.3.0.zip",
-                                  "sha256":  "5e59d7f8ba90b521c3ee0c1e6317578bf775f193b4a95fbcfc593adf864f832c",
-                                  "bytes":  94170791
+                                  "name":  "luna-goes-places-web-0.4.0.zip",
+                                  "sha256":  "6b6a4c2bfb124609a86f43bb5162d04916b99f5684b3f0049793a5ed03b86500",
+                                  "bytes":  125969035
                               }
                   },
     "signing_certificate_sha256":  "e2065b37ef62557a765288b6e53c1d8e9c66a4538bbecef76beaa472a36b29ca",

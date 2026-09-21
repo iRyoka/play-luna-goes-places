@@ -1,7 +1,7 @@
 @tool
 extends ChapterBackdrop
 
-const BACKGROUND: Texture2D = preload("res://assets/environments/chapter-01/map/chapter-background.png")
+const BACKGROUND: Texture2D = preload("res://assets/environments/chapter-01/map/chapter-background.webp")
 
 
 func _draw() -> void:

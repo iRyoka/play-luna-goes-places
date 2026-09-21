@@ -14,7 +14,17 @@ const TARGET_SCALE_MAX := 0.33
 const SCROLL_SPEED := 70.0
 const POP_EFFECT_DURATION := 0.42
 const EVENT_EFFECT_DURATION := 1.1
-const EVENT_TAP_INDICES: Array[int] = [4, 8]
+const WAVE_ONE_RANGE := Vector2i(7, 10)
+const GIANT_ONE_RANGE := Vector2i(14, 17)
+const WAVE_TWO_RANGE := Vector2i(22, 25)
+const GIANT_TWO_RANGE := Vector2i(30, 33)
+const WAVE_THREE_RANGE := Vector2i(38, 41)
+const GIANT_THREE_RANGE := Vector2i(47, 50)
+const BUBBLE_WAVE_TARGET_COUNT := 2
+const BUBBLE_WAVE_DELAY := 0.14
+const BUBBLE_WAVE_DURATION := 0.58
+const GIANT_BUBBLE_DURATION := 0.9
+const GIANT_BUBBLE_MAX_RADIUS := 280.0
 const RIM_DUCK_TOTAL := 10
 const RIM_DUCK_SLOT_WIDTH := 82.0
 const RIM_DUCK_Y := 38.0
@@ -57,6 +67,10 @@ class BubbleTarget:
 	var texture_index := 0
 	var scale_factor := 0.27
 	var timeline_index := 0
+	var wave_age := -1.0
+	var wave_delay := 0.0
+	var giant_bubble := false
+	var chain_pop := false
 
 
 class WaterDecoration:
@@ -64,13 +78,17 @@ class WaterDecoration:
 	var y := 0.0
 	var scale_factor := 1.0
 
-@export_range(1, 32, 1) var required_taps := 30
-@export var deterministic_seed := 8101
+@export_range(1, 80, 1) var required_taps := 60
+## Zero gives ordinary play a fresh run. Tests and bug reports set an explicit seed.
+@export var deterministic_seed := 0
 
 var _targets: Array[BubbleTarget] = []
 var _water_decoration_states: Array[WaterDecoration] = []
 var _rim_duck_texture_indices: Array[int] = []
 var _rim_duck_celebration_ages: Array[float] = []
+var _event_tap_indices: Array[int] = []
+var _giant_bubble_event_progresses: Array[int] = []
+var _giant_bubble_pop_count := 0
 var _next_timeline_index := 0
 var _rng := RandomNumberGenerator.new()
 var _visual_rng := RandomNumberGenerator.new()
@@ -134,8 +152,15 @@ func _process(delta: float) -> void:
 				if target.center.x < -TARGET_HIT_RADIUS:
 					_recycle_target(target)
 			needs_redraw = true
+		if target.wave_age >= 0.0:
+			target.wave_age += delta
+			if target.wave_age > target.wave_delay + BUBBLE_WAVE_DURATION:
+				target.wave_age = -1.0
+			needs_redraw = true
 		elif target.pop_age >= 0.0:
 			target.pop_age += delta
+			if target.giant_bubble:
+				_consume_giant_bubble_contacts(target)
 			var effect_duration := EVENT_EFFECT_DURATION if target.event_pop else POP_EFFECT_DURATION
 			if target.pop_age > effect_duration:
 				target.pop_age = -1.0
@@ -169,12 +194,23 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func reset_run() -> void:
-	_rng.seed = deterministic_seed
-	_visual_rng.seed = deterministic_seed + 137
+	if deterministic_seed == 0:
+		_rng.randomize()
+		_visual_rng.randomize()
+	else:
+		_rng.seed = deterministic_seed
+		_visual_rng.seed = deterministic_seed + 137
 	_targets.clear()
 	_water_decoration_states.clear()
 	_rim_duck_texture_indices.clear()
 	_rim_duck_celebration_ages.clear()
+	_event_tap_indices = _build_event_tap_indices()
+	_giant_bubble_event_progresses = [
+		_event_tap_indices[1],
+		_event_tap_indices[3],
+		_event_tap_indices[5],
+	]
+	_giant_bubble_pop_count = 0
 	_next_timeline_index = 0
 	_progress = 0
 	_input_enabled = true
@@ -204,6 +240,11 @@ func reset_run() -> void:
 		decoration.scale_factor = _visual_rng.randf_range(0.55, 0.85)
 		_water_decoration_states.append(decoration)
 	queue_redraw()
+
+
+func start_run_with_seed(seed: int) -> void:
+	deterministic_seed = seed
+	reset_run()
 
 
 func set_input_enabled(enabled: bool) -> void:
@@ -266,7 +307,35 @@ func get_completion_emit_count() -> int:
 
 
 func is_event_progress(progress: int) -> bool:
-	return EVENT_TAP_INDICES.has(progress)
+	return _event_tap_indices.has(progress)
+
+
+func get_event_tap_indices() -> Array[int]:
+	return _event_tap_indices.duplicate()
+
+
+func get_active_bubble_wave_count() -> int:
+	var count := 0
+	for target in _targets:
+		if target.active and target.wave_age >= 0.0:
+			count += 1
+	return count
+
+
+func get_giant_bubble_event_progresses() -> Array[int]:
+	return _giant_bubble_event_progresses.duplicate()
+
+
+func get_active_giant_bubble_count() -> int:
+	var count := 0
+	for target in _targets:
+		if target.giant_bubble and target.pop_age >= 0.0:
+			count += 1
+	return count
+
+
+func get_giant_bubble_pop_count() -> int:
+	return _giant_bubble_pop_count
 
 
 func get_active_target_count() -> int:
@@ -405,6 +474,19 @@ func _randomize_target_visual(target: BubbleTarget) -> void:
 	target.scale_factor = _visual_rng.randf_range(TARGET_SCALE_MIN, TARGET_SCALE_MAX)
 
 
+func _build_event_tap_indices() -> Array[int]:
+	# Keep the opening taps simple, then alternate small waves with three giant
+	# bubbles. Each authored range is separate, so spectacles never bunch.
+	return [
+		_rng.randi_range(WAVE_ONE_RANGE.x, WAVE_ONE_RANGE.y),
+		_rng.randi_range(GIANT_ONE_RANGE.x, GIANT_ONE_RANGE.y),
+		_rng.randi_range(WAVE_TWO_RANGE.x, WAVE_TWO_RANGE.y),
+		_rng.randi_range(GIANT_TWO_RANGE.x, GIANT_TWO_RANGE.y),
+		_rng.randi_range(WAVE_THREE_RANGE.x, WAVE_THREE_RANGE.y),
+		_rng.randi_range(GIANT_THREE_RANGE.x, GIANT_THREE_RANGE.y),
+	]
+
+
 func _constrain_target_to_bathtub(target: BubbleTarget) -> void:
 	# Protect against the sprite's randomized size, pulse, and bob moving visible
 	# pixels beyond the bathtub's interior.
@@ -435,9 +517,28 @@ func _constrain_target_to_left_cap(target: BubbleTarget) -> void:
 func _consume_target(target: BubbleTarget) -> void:
 	target.active = false
 	target.pop_age = 0.0
+	# A child may tap a bubble while it is reacting to a previous wave. Its own pop
+	# takes over immediately; otherwise the stale wave timer postpones recycling
+	# after the pop effect and thins the field during rapid play.
+	target.wave_age = -1.0
+	target.wave_delay = 0.0
 	_progress += 1
 	target.event_pop = is_event_progress(_progress)
 	if target.event_pop:
+		target.giant_bubble = _giant_bubble_event_progresses.has(_progress)
+		if target.giant_bubble:
+			for earlier_target in _targets:
+				if earlier_target != target and earlier_target.giant_bubble and earlier_target.pop_age >= 0.0:
+					# Rapid taps can reach the next giant Event before the previous
+					# animation settles. Keep the spectacle singular rather than
+					# stacking two expanding bubbles.
+					earlier_target.giant_bubble = false
+					earlier_target.pop_age = EVENT_EFFECT_DURATION
+			# The expanding bubble owns only its local visual space: nearby targets
+			# pop when visibly reached, but the child can keep tapping everywhere.
+			target.chain_pop = false
+		else:
+			_start_bubble_wave(target)
 		sound_requested.emit(&"pop_event")
 		event_triggered.emit(_progress)
 	else:
@@ -462,6 +563,44 @@ func _consume_target(target: BubbleTarget) -> void:
 		sound_requested.emit(&"bubbles")
 		quota_completed.emit()
 	queue_redraw()
+
+
+func _start_bubble_wave(source: BubbleTarget) -> void:
+	var nearest: Array[BubbleTarget] = []
+	for candidate in _targets:
+		if candidate == source or not candidate.active:
+			continue
+		var insert_at := nearest.size()
+		for index in range(nearest.size()):
+			if candidate.center.distance_squared_to(source.center) < nearest[index].center.distance_squared_to(source.center):
+				insert_at = index
+				break
+		nearest.insert(insert_at, candidate)
+		if nearest.size() > BUBBLE_WAVE_TARGET_COUNT:
+			nearest.pop_back()
+	for index in range(nearest.size()):
+		nearest[index].wave_age = 0.0
+		nearest[index].wave_delay = BUBBLE_WAVE_DELAY * float(index)
+
+
+func _consume_giant_bubble_contacts(source: BubbleTarget) -> void:
+	var expansion := clampf(source.pop_age / GIANT_BUBBLE_DURATION, 0.0, 1.0)
+	var giant_radius := lerpf(source.visual_radius, GIANT_BUBBLE_MAX_RADIUS, ease(expansion, 0.45))
+	for candidate in _targets:
+		if candidate == source or not candidate.active:
+			continue
+		if candidate.center.distance_to(source.center) > giant_radius + candidate.visual_radius:
+			continue
+		candidate.active = false
+		candidate.pop_age = 0.0
+		# A giant bubble visibly replaces any earlier nearby wave. Leaving its wave
+		# timer live delays this target's pop/recycle path and can make rapid play
+		# look needlessly sparse.
+		candidate.wave_age = -1.0
+		candidate.wave_delay = 0.0
+		candidate.event_pop = true
+		candidate.chain_pop = true
+		_giant_bubble_pop_count += 1
 
 
 func _draw() -> void:
@@ -574,8 +713,40 @@ func _draw_target(target: BubbleTarget) -> void:
 		var draw_size := tex.get_size() * target.scale_factor * cue_scale
 		var draw_pos := center - draw_size * 0.5
 		draw_texture_rect(tex, Rect2(draw_pos, draw_size), false)
+		if target.wave_age >= target.wave_delay:
+			var wave_t := clampf((target.wave_age - target.wave_delay) / BUBBLE_WAVE_DURATION, 0.0, 1.0)
+			var wave_texture: Texture2D = _effect_textures[&"pop_ring_large"]
+			var wave_size := wave_texture.get_size() * lerpf(0.45, 1.05, wave_t)
+			var wave_alpha := 0.65 * (1.0 - wave_t)
+			draw_texture_rect(
+				wave_texture,
+				Rect2(center - wave_size * 0.5, wave_size),
+				false,
+				Color(1.0, 1.0, 1.0, wave_alpha),
+			)
 		return
 	if target.pop_age >= 0.0:
+		if target.giant_bubble:
+			var giant_t := clampf(target.pop_age / GIANT_BUBBLE_DURATION, 0.0, 1.0)
+			var giant_texture: Texture2D = _bubble_textures[target.texture_index]
+			var giant_radius := lerpf(target.visual_radius, GIANT_BUBBLE_MAX_RADIUS, ease(giant_t, 0.45))
+			var giant_size := Vector2.ONE * giant_radius * 2.0
+			var giant_alpha := 1.0 - 0.25 * giant_t
+			draw_texture_rect(
+				giant_texture,
+				Rect2(target.center - giant_size * 0.5, giant_size),
+				false,
+				Color(1.0, 1.0, 1.0, giant_alpha),
+			)
+			var ring_texture: Texture2D = _effect_textures[&"pop_ring_large"]
+			var ring_size := giant_size * 1.12
+			draw_texture_rect(
+				ring_texture,
+				Rect2(target.center - ring_size * 0.5, ring_size),
+				false,
+				Color(1.0, 1.0, 1.0, 0.7 * (1.0 - giant_t)),
+			)
+			return
 		# Draw effect texture for pop
 		var effect_duration := EVENT_EFFECT_DURATION if target.event_pop else POP_EFFECT_DURATION
 		var t := clampf(target.pop_age / effect_duration, 0.0, 1.0)

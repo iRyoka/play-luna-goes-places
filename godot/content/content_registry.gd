@@ -304,24 +304,25 @@ func _build_default_chapters() -> Array[ChapterDefinition]:
 		ChapterDefinition.new(
 			&"chapter_01",
 			"res://map/chapter_01/map.tscn",
-			[&"chapter_01/drag_match", &"chapter_01/numbers", &"chapter_01/puzzle_assembly", &"chapter_01/memory_intro", &"chapter_01/memory", &"chapter_01/cooking", &"chapter_01/pop_tap"],
+			[&"chapter_01/drag_match", &"chapter_01/puzzle_assembly", &"chapter_01/memory_intro", &"chapter_01/memory", &"chapter_01/cooking", &"chapter_01/flying_collector", &"chapter_01/pop_tap"],
 			[
 				ChapterProgressionNode.new(&"chapter_01/drag_match"),
-				ChapterProgressionNode.new(&"chapter_01/numbers", [&"chapter_01/drag_match"], 1),
-				ChapterProgressionNode.new(&"chapter_01/puzzle_assembly", [&"chapter_01/numbers"], 1),
+				ChapterProgressionNode.new(&"chapter_01/puzzle_assembly", [&"chapter_01/drag_match"], 1),
 				ChapterProgressionNode.new(&"chapter_01/memory_intro", [&"chapter_01/puzzle_assembly"], 1),
 				ChapterProgressionNode.new(&"chapter_01/memory", [&"chapter_01/memory_intro"], 1),
 				ChapterProgressionNode.new(&"chapter_01/cooking", [&"chapter_01/memory"], 1),
-				ChapterProgressionNode.new(&"chapter_01/pop_tap", [&"chapter_01/cooking"], 1),
+				ChapterProgressionNode.new(&"chapter_01/flying_collector", [&"chapter_01/cooking"], 1),
+				ChapterProgressionNode.new(&"chapter_01/pop_tap", [&"chapter_01/flying_collector"], 1),
 			],
 		),
 		ChapterDefinition.new(
 			&"chapter_02",
 			"res://map/chapter_02/map.tscn",
-			[&"chapter_02/trail_meadow", &"chapter_02/picture_creation"],
+			[&"chapter_02/trail_meadow", &"chapter_02/picture_creation", &"chapter_02/crab_mosaic"],
 			[
 				ChapterProgressionNode.new(&"chapter_02/trail_meadow"),
 				ChapterProgressionNode.new(&"chapter_02/picture_creation", [&"chapter_02/trail_meadow"], 1),
+				ChapterProgressionNode.new(&"chapter_02/crab_mosaic", [&"chapter_02/picture_creation"], 1),
 			],
 			[&"chapter_01/pop_tap"],
 		),
@@ -331,12 +332,13 @@ func _build_default_chapters() -> Array[ChapterDefinition]:
 func _build_default_levels() -> Array[LevelDefinition]:
 	return [
 		LevelDefinition.new(&"chapter_01/drag_match", &"chapter_01", "res://levels/drag_match/drag_match.tscn", &"drag_match", &"DragMatchLocation", &"main"),
-		LevelDefinition.new(&"chapter_01/memory_intro", &"chapter_01", "res://levels/memory/memory_intro.tscn", &"memory", &"MemoryLocation", &"main"),
-		LevelDefinition.new(&"chapter_01/numbers", &"chapter_01", "res://levels/numbers/numbers.tscn", &"numbers", &"NumbersLocation", &"main"),
+		LevelDefinition.new(&"chapter_01/memory_intro", &"chapter_01", "res://levels/memory/memory_intro.tscn", &"memory", &"MemoryIntroLocation", &"main"),
 		LevelDefinition.new(&"chapter_01/memory", &"chapter_01", "res://levels/memory/memory.tscn", &"memory", &"ValleyLookout", &"main"),
-		LevelDefinition.new(&"chapter_01/puzzle_assembly", &"chapter_01", "res://levels/puzzle_assembly/puzzle_assembly.tscn", &"puzzle_assembly", &"MemoryIntroLocation", &"main"),
+		LevelDefinition.new(&"chapter_01/puzzle_assembly", &"chapter_01", "res://levels/puzzle_assembly/puzzle_assembly.tscn", &"puzzle_assembly", &"NumbersLocation", &"main"),
 		LevelDefinition.new(&"chapter_01/cooking", &"chapter_01", "res://levels/cooking/cooking.tscn", &"cooking", &"CreekBend", &"main"),
+		LevelDefinition.new(&"chapter_01/flying_collector", &"chapter_01", "res://levels/flying_collector/flying_collector.tscn", &"flying_collector", &"ForestClearing", &"main"),
 		LevelDefinition.new(&"chapter_01/pop_tap", &"chapter_01", "res://levels/pop_tap/pop_tap.tscn", &"pop_tap", &"CoastRoad", &"main"),
 		LevelDefinition.new(&"chapter_02/trail_meadow", &"chapter_02", "res://levels/trail/trail.tscn", &"trail", &"MeadowPath", &"main"),
 		LevelDefinition.new(&"chapter_02/picture_creation", &"chapter_02", "res://levels/picture_creation/picture_creation.tscn", &"picture_creation", &"PictureNook", &"main"),
+		LevelDefinition.new(&"chapter_02/crab_mosaic", &"chapter_02", "res://levels/crab_mosaic/crab_mosaic.tscn", &"crab_mosaic", &"Lighthouse", &"main"),
 	]

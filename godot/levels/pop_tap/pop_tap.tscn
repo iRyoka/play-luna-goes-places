@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://levels/pop_tap/pop_tap_board.gd" id="2_board"]
 [ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="3_back"]
 [ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="4_completion"]
-[ext_resource type="Texture2D" path="res://assets/gameplay/pop-tap/bathroom_backdrop.png" id="5_backdrop"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/pop-tap/bathroom_backdrop.webp" id="5_backdrop"]
 
 [node name="PopTapLevel" type="Control"]
 layout_mode = 3

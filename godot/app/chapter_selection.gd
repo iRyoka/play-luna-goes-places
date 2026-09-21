@@ -17,9 +17,9 @@ const CARD_SIZE_RATIO := Vector2(0.20, 0.196)
 const CARD_GAP_RATIO := 0.035
 const PAGE_COLUMN_RATIOS: Array[float] = [0.375, 0.625]
 const CHAPTER_THUMBNAILS: Dictionary[StringName, Texture2D] = {
-	&"chapter_01": preload("res://assets/environments/chapter-01/map/chapter-background.png"),
+	&"chapter_01": preload("res://assets/environments/chapter-01/map/chapter-background.webp"),
 }
-const CHAPTER_MAP_SNAPSHOT_TEMPLATE := "res://assets/environments/%s/map/chapter-background.png"
+const CHAPTER_MAP_SNAPSHOT_TEMPLATE := "res://assets/environments/%s/map/chapter-background.webp"
 
 @onready var slots: Node2D = %Slots
 

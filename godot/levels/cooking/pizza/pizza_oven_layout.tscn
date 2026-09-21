@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cinxi4uoi5je7"]
 
-[ext_resource type="Texture2D" uid="uid://c7l4md7a88jk7" path="res://assets/gameplay/cooking/pizza/pizza-kitchen-background.png" id="1_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/cooking/pizza/pizza-kitchen-background.webp" id="1_background"]
 [ext_resource type="Texture2D" uid="uid://dpv5rb2rm0e5l" path="res://assets/gameplay/cooking/pizza/oven-glow.png" id="2_glow"]
 [ext_resource type="Script" uid="uid://bfjq38yptjox" path="res://levels/cooking/pizza/pizza_oven_layout.gd" id="3_layout"]
 

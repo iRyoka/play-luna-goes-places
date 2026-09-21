@@ -25,6 +25,13 @@ const DEFAULT_COMPLETED_CORRIDOR_COLOR := Color(0.88, 0.90, 0.78)
 ## segment inherits this unless it overrides it, which is what keeps one stage
 ## feeling like one rule. It must not be left on INHERIT.
 @export var containment: TrailSegment.Containment = TrailSegment.Containment.CONTAINED
+## Internal checkpoints remain part of one held drag. Generated Ant uses this;
+## authored places keep their existing pause-and-release behaviour.
+@export var continuous_checkpoints := false
+
+## Runtime-only shared panorama; authored stages leave this empty.
+var ant_journey: AntJourney
+var view_origin := 0.0
 
 @export_group("Actor")
 ## The travelling actor's frames, cycled in order while the level is playable. One

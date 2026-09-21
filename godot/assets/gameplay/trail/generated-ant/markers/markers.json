@@ -1,0 +1,173 @@
+{
+  "berries": [
+    {
+      "id": "berry-strawberry",
+      "file": "berry-strawberry.png",
+      "source_box_size": [
+        241,
+        298
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        103.58333333333334,
+        127.75
+      ]
+    },
+    {
+      "id": "berry-raspberry",
+      "file": "berry-raspberry.png",
+      "source_box_size": [
+        249,
+        280
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        104.40485829959513,
+        116.95546558704453
+      ]
+    },
+    {
+      "id": "berry-blueberry",
+      "file": "berry-blueberry.png",
+      "source_box_size": [
+        245,
+        244
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        104.41152263374487,
+        104.0
+      ]
+    },
+    {
+      "id": "berry-blackberry",
+      "file": "berry-blackberry.png",
+      "source_box_size": [
+        241,
+        287
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        104.418410041841,
+        123.66527196652719
+      ]
+    },
+    {
+      "id": "berry-cloudberry",
+      "file": "berry-cloudberry.png",
+      "source_box_size": [
+        230,
+        281
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        104.43859649122807,
+        126.80701754385964
+      ]
+    },
+    {
+      "id": "berry-original",
+      "file": "berry-original.png",
+      "source_box_size": [
+        360,
+        465
+      ],
+      "displayed_body_width": 100,
+      "export_scale": 2,
+      "anchor": [
+        104.28011204481793,
+        137.8935574229692
+      ]
+    }
+  ],
+  "leaves": [
+    {
+      "id": "leaf-3",
+      "file": "leaf-3.png",
+      "source_box_size": [
+        258,
+        346
+      ],
+      "displayed_body_width": 180,
+      "export_scale": 2,
+      "anchor": [
+        184.703125,
+        246.578125
+      ]
+    },
+    {
+      "id": "leaf-4",
+      "file": "leaf-4.png",
+      "source_box_size": [
+        279,
+        345
+      ],
+      "displayed_body_width": 180,
+      "export_scale": 2,
+      "anchor": [
+        184.64981949458485,
+        227.5379061371841
+      ]
+    },
+    {
+      "id": "leaf-5",
+      "file": "leaf-5.png",
+      "source_box_size": [
+        256,
+        350
+      ],
+      "displayed_body_width": 180,
+      "export_scale": 2,
+      "anchor": [
+        184.70866141732282,
+        251.32283464566927
+      ]
+    }
+  ],
+  "checkpoint_body_width": 100,
+  "objective_body_width": 200,
+  "checkpoint_leg_bounds": [
+    650,
+    1250
+  ],
+  "objective_glow": {
+    "animation": "gentle colour-changing pulse",
+    "period_seconds": 3,
+    "hue_period_seconds": 9,
+    "alpha_range": [
+      0.18,
+      0.34
+    ],
+    "separate_layer": true
+  },
+  "status": "Prepared artwork; generated previews only, scene integration pending",
+  "connectors": [
+    {
+      "id": "A",
+      "file": "connector-A.png",
+      "weight": 0.75,
+      "anchor": [
+        240,
+        240
+      ],
+      "export_scale": 2,
+      "color": "dry olive-brown"
+    },
+    {
+      "id": "B",
+      "file": "connector-B.png",
+      "weight": 0.25,
+      "anchor": [
+        240,
+        336
+      ],
+      "export_scale": 2,
+      "color": "dry olive-brown"
+    }
+  ]
+}

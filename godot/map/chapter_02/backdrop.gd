@@ -5,7 +5,7 @@ extends ChapterBackdrop
 ## Chapter 2's supplied production map. The shared map controller continues to
 ## draw authored progression routes above this background.
 
-const BACKGROUND: Texture2D = preload("res://assets/environments/chapter-02/map/chapter-background.png")
+const BACKGROUND: Texture2D = preload("res://assets/environments/chapter-02/map/chapter-background.webp")
 # Kept for the blank, still-temporary Chapter 2 selection card until Task 59.
 const SKY_COLOR := Color("#bcd7dd")
 const BANDS: Array[Dictionary] = [

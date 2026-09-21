@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://bwwgqm63iyo2g"]
+
+[ext_resource type="Script" uid="uid://b65v0m31enyhg" path="res://levels/flying_collector/flying_collector_puppet_layout.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dmqmeerstrse5" path="res://assets/gameplay/flying-collector/luna-body.png" id="2_body"]
+[ext_resource type="Texture2D" uid="uid://b3irwww33fyy3" path="res://assets/gameplay/flying-collector/ponytail-left.png" id="3_left_ponytail"]
+[ext_resource type="Texture2D" uid="uid://b51i1speo6vwl" path="res://assets/gameplay/flying-collector/ponytail-right.png" id="4_right_ponytail"]
+[ext_resource type="Texture2D" uid="uid://dmy37qjxdqfv7" path="res://assets/gameplay/flying-collector/kite.png" id="5_kite"]
+[ext_resource type="Texture2D" uid="uid://dkckmicuenffs" path="res://assets/gameplay/flying-collector/kite-tail-bow.png" id="6_bow"]
+[ext_resource type="Texture2D" uid="uid://dxyx5b5wp8272" path="res://assets/gameplay/flying-collector/basket-base.png" id="7_basket"]
+
+[node name="FlyingCollectorPuppetLayout" type="Node2D" unique_id=365364970]
+script = ExtResource("1_script")
+
+[node name="PuppetRoot" type="Node2D" parent="." unique_id=715719903]
+position = Vector2(820, 560)
+
+[node name="KiteHandAnchor" type="Marker2D" parent="PuppetRoot" unique_id=1075210377]
+position = Vector2(127, -170)
+
+[node name="KiteAnchor" type="Marker2D" parent="PuppetRoot" unique_id=654247199]
+position = Vector2(180, -305)
+
+[node name="TailAnchor" type="Marker2D" parent="PuppetRoot" unique_id=1015765268]
+position = Vector2(124, -135)
+
+[node name="BowOneAnchor" type="Marker2D" parent="PuppetRoot" unique_id=1645086134]
+position = Vector2(99, -96)
+
+[node name="BowTwoAnchor" type="Marker2D" parent="PuppetRoot" unique_id=1326152055]
+position = Vector2(58, -21)
+
+[node name="BowThreeAnchor" type="Marker2D" parent="PuppetRoot" unique_id=842019577]
+position = Vector2(11, 55)
+
+[node name="Kite" type="Sprite2D" parent="PuppetRoot" unique_id=744051937]
+position = Vector2(214, -410)
+rotation = 0.30805784
+texture = ExtResource("5_kite")
+
+[node name="BowOne" type="Sprite2D" parent="PuppetRoot" unique_id=1839257577]
+z_index = 2
+position = Vector2(98, -103)
+texture = ExtResource("6_bow")
+
+[node name="BowTwo" type="Sprite2D" parent="PuppetRoot" unique_id=1633251554]
+z_index = 2
+position = Vector2(57, -29)
+texture = ExtResource("6_bow")
+
+[node name="BowThree" type="Sprite2D" parent="PuppetRoot" unique_id=821015142]
+z_index = 2
+position = Vector2(10, 51)
+texture = ExtResource("6_bow")
+
+[node name="LunaBody" type="Sprite2D" parent="PuppetRoot" unique_id=858167736]
+z_index = 1
+texture = ExtResource("2_body")
+
+[node name="Basket" type="Sprite2D" parent="PuppetRoot" unique_id=422420481]
+position = Vector2(-137, 20)
+rotation = 0.3334533
+scale = Vector2(0.59, 0.59)
+texture = ExtResource("7_basket")
+
+[node name="PonytailLeftAnchor" type="Marker2D" parent="PuppetRoot" unique_id=393328583]
+position = Vector2(-67, -162)
+rotation = -0.28054616
+
+[node name="PonytailRightAnchor" type="Marker2D" parent="PuppetRoot" unique_id=1956887332]
+position = Vector2(34, -196)
+rotation = -0.14703244
+
+[node name="PonytailLeft" type="Sprite2D" parent="PuppetRoot/PonytailLeftAnchor" unique_id=1007173598]
+position = Vector2(-41.0, -34.7)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_left_ponytail")
+
+[node name="PonytailRight" type="Sprite2D" parent="PuppetRoot/PonytailRightAnchor" unique_id=1589076259]
+position = Vector2(39.6, -35.6)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("4_right_ponytail")

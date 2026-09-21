@@ -25,7 +25,6 @@ marker_slots = {
 &"DragMatchLocation": Vector2(0.13, 0.73),
 &"ForestClearing": Vector2(0.84, 0.3),
 &"MemoryIntroLocation": Vector2(0.46, 0.36),
-&"MemoryLocation": Vector2(0.31, 0.64),
 &"MountainPass": Vector2(0.64, 0.28),
 &"NumbersLocation": Vector2(0.25, 0.43),
 &"ValleyLookout": Vector2(0.57, 0.62)

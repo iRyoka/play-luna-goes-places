@@ -19,6 +19,7 @@ extends LevelController
 
 const REVEAL_HOLD := 0.85
 const HANDOVER_FADE := 0.3
+const REFERENCE_SIZE := Vector2(2160.0, 1080.0)
 
 var _stage_index := 0
 var _pieces: Array[PuzzlePiece] = []
@@ -27,10 +28,13 @@ var _placed_count := 0
 var _placement_rng := RandomNumberGenerator.new()
 var _assembly_center := Vector2.ZERO
 var _is_playable := false
+var _viewport_offset := Vector2.ZERO
 
 
 func _ready() -> void:
 	super._ready()
+	_viewport_offset = _current_viewport_offset()
+	resized.connect(_apply_viewport_offset)
 	completion_started.connect(_on_completion_started)
 	if get_tree().current_scene == self:
 		replay_requested.connect(_restart_preview)
@@ -162,7 +166,7 @@ func _create_backing(part: PuzzlePart) -> void:
 	sprite.z_index = part.placed_z_index
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	backings_container.add_child(sprite)
-	sprite.global_position = part.assembled_position
+	sprite.global_position = _to_viewport_position(part.assembled_position)
 
 
 func _create_slot(part: PuzzlePart, index: int) -> PuzzleSlot:
@@ -172,7 +176,7 @@ func _create_slot(part: PuzzlePart, index: int) -> PuzzleSlot:
 	slot.artwork = part.artwork
 	slot.artwork_scale = part.assembled_scale
 	slot.snap_radius = part.get_snap_radius()
-	slot.global_position = part.assembled_position
+	slot.global_position = _to_viewport_position(part.assembled_position)
 	slots_container.add_child(slot)
 	return slot
 
@@ -188,7 +192,7 @@ func _create_piece(part: PuzzlePart, index: int, start_slot: Rect2) -> PuzzlePie
 	piece.artwork_touch_radius = part.get_snap_radius()
 	piece.home_touch_radius = _home_touch_radius(part, piece.home_artwork_scale)
 	piece.placed_z_index = part.placed_z_index
-	piece.global_position = start_slot.get_center()
+	piece.global_position = _to_viewport_position(start_slot.get_center())
 	pieces_container.add_child(piece)
 	piece.drag_started.connect(func() -> void: request_sound_effect(&"grab"))
 	piece.drop_requested.connect(_on_piece_drop_requested)
@@ -302,6 +306,28 @@ func _clear_stage() -> void:
 func _set_assembly_scale(value: float) -> void:
 	pieces_container.scale = Vector2.ONE * value
 	pieces_container.position = _assembly_center * (1.0 - value)
+
+
+func _current_viewport_offset() -> Vector2:
+	return (size - REFERENCE_SIZE) * 0.5
+
+
+func _to_viewport_position(authored_position: Vector2) -> Vector2:
+	return authored_position + _viewport_offset
+
+
+func _apply_viewport_offset() -> void:
+	var next_offset := _current_viewport_offset()
+	var delta := next_offset - _viewport_offset
+	if delta == Vector2.ZERO:
+		return
+	_viewport_offset = next_offset
+	for backing: Node2D in backings_container.get_children():
+		backing.global_position += delta
+	for slot: PuzzleSlot in _slots:
+		slot.global_position += delta
+	for piece: PuzzlePiece in _pieces:
+		piece.shift_layout(delta)
 
 
 func _on_completion_started() -> void:

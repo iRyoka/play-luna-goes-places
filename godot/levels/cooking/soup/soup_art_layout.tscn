@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cidlrtoskw0rj"]
 
-[ext_resource type="Texture2D" uid="uid://bmbhqvcafjh05" path="res://assets/gameplay/cooking/kitchen-background.png" id="1_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/cooking/kitchen-background.webp" id="1_background"]
 [ext_resource type="Texture2D" uid="uid://xxw71mrm0j4w" path="res://assets/gameplay/cooking/pot-empty-large.png" id="2_pot"]
 [ext_resource type="Texture2D" uid="uid://dt0cmkg1jk8sn" path="res://assets/gameplay/cooking/soup-surface.png" id="3_soup"]
 

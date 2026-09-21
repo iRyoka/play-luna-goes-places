@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" uid="uid://c7l4md7a88jk7" path="res://assets/gameplay/cooking/pizza/pizza-kitchen-background.png" id="1_background"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/cooking/pizza/pizza-kitchen-background.webp" id="1_background"]
 [ext_resource type="Texture2D" uid="uid://c3lqicurknmw8" path="res://assets/gameplay/cooking/pizza/pizza-raw.png" id="2_pizzaraw"]
 [ext_resource type="Texture2D" uid="uid://yvb8o5umx8yn" path="res://assets/gameplay/cooking/pizza/pizza-sauce.png" id="3_pizzasauce"]
 [ext_resource type="Texture2D" uid="uid://b16j3vgmlbirt" path="res://assets/gameplay/cooking/pizza/pizza-cheese.png" id="4_pizzacheese"]

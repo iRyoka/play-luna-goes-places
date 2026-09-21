@@ -155,6 +155,11 @@ func get_home_global_position() -> Vector2:
 	return _home_position
 
 
+func shift_layout(offset: Vector2) -> void:
+	global_position += offset
+	_home_position += offset
+
+
 func _release(pointer_position: Vector2) -> void:
 	global_position = pointer_position + _drag_offset
 	_dragging = false
