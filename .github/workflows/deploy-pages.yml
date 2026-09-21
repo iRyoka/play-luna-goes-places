@@ -1,0 +1,59 @@
+name: Deploy released Pages site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@v6
+
+      - name: Assemble the released site
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(tr -d '\r\n' < version.txt)"
+          web_name="luna-goes-places-web-${version}.zip"
+          web_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${version}/${web_name}"
+          expected_sha="$(jq -r '.artifacts.web.sha256' release.json)"
+
+          test -n "${expected_sha}"
+          test "${expected_sha}" != "null"
+          curl --fail --location --retry 3 --output "${web_name}" "${web_url}"
+          test "$(sha256sum "${web_name}" | awk '{print $1}')" = "${expected_sha}"
+
+          mkdir -p _site "_site/play/${version}"
+          cp -R site/. _site/
+          unzip -q "${web_name}" -d "_site/play/${version}"
+          test -f _site/index.html
+          test -f "_site/play/${version}/index.html"
+          test -f "_site/play/${version}/index.pck"
+          printf 'window.LunaPublicConfig = {"version":"%s","play_url":"./play/%s/","apk_url":"https://github.com/%s/releases/download/%s/luna-goes-places-%s.apk","source_url":"https://github.com/%s","license_url":"https://github.com/%s/blob/main/LICENSE.md"};\n' "${version}" "${version}" "${GITHUB_REPOSITORY}" "${version}" "${version}" "${GITHUB_REPOSITORY}" "${GITHUB_REPOSITORY}" > _site/site-config.js
+          printf 'luna.iryoka.com\n' > _site/CNAME
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
