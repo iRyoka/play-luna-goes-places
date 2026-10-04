@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://levels/procedural_jigsaw/procedural_jigsaw.gd" id="1_level"]
+[ext_resource type="Script" path="res://levels/procedural_jigsaw/procedural_jigsaw_board.gd" id="2_board"]
+[ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="3_completion"]
+[ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="4_back"]
+[ext_resource type="Texture2D" path="res://assets/gameplay/procedural-jigsaw/chapter-02-jigsaw-backdrop.webp" id="5_backdrop"]
+[ext_resource type="Shader" path="res://levels/puzzle_assembly/puzzle_background_desaturate.gdshader" id="6_desaturate"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_desaturate"]
+shader = ExtResource("6_desaturate")
+shader_parameter/saturation = 0.35
+
+[node name="ProceduralJigsaw" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_level")
+level_id = &"chapter_02/procedural_jigsaw"
+
+[node name="Backdrop" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+modulate = Color(0.78, 0.78, 0.78, 1)
+texture = ExtResource("5_backdrop")
+expand_mode = 1
+stretch_mode = 6
+material = SubResource("ShaderMaterial_desaturate")
+
+[node name="Board" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_board")
+
+[node name="Gameplay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 244.0
+offset_bottom = 244.0
+focus_mode = 0
+flat = true
+script = ExtResource("4_back")
+
+[node name="CompletionOverlay" parent="." instance=ExtResource("3_completion")]

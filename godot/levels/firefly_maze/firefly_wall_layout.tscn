@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://cyab8ei64vbtn"]
+
+[ext_resource type="Script" uid="uid://kwv8qymet57f" path="res://levels/firefly_maze/firefly_wall_layout_guide.gd" id="1_guide"]
+[ext_resource type="Texture2D" uid="uid://do8dgjtqikaka" path="res://assets/gameplay/firefly-maze/wall-01.png" id="2_wall01"]
+[ext_resource type="Texture2D" uid="uid://dg8qcm0axsb2x" path="res://assets/gameplay/firefly-maze/wall-02.png" id="3_wall02"]
+[ext_resource type="Texture2D" uid="uid://b12q7qu57gr4i" path="res://assets/gameplay/firefly-maze/wall-03.png" id="4_wall03"]
+[ext_resource type="Texture2D" uid="uid://dospc6y77rqia" path="res://assets/gameplay/firefly-maze/wall-04.png" id="5_wall04"]
+[ext_resource type="Texture2D" uid="uid://bw645ivbi4cei" path="res://assets/gameplay/firefly-maze/wall-05.png" id="6_wall05"]
+[ext_resource type="Texture2D" uid="uid://dvklauany7key" path="res://assets/gameplay/firefly-maze/wall-06.png" id="7_wall06"]
+[ext_resource type="Texture2D" uid="uid://dqqcqkpfr7u05" path="res://assets/gameplay/firefly-maze/wall-07.png" id="8_wall07"]
+[ext_resource type="Texture2D" uid="uid://nqsscsujjqia" path="res://assets/gameplay/firefly-maze/wall-08.png" id="9_wall08"]
+[ext_resource type="Texture2D" uid="uid://dv2tvn6gk7am7" path="res://assets/gameplay/firefly-maze/wall-09.png" id="10_wall09"]
+
+[node name="FireflyWallLayout" type="Node2D" unique_id=998423172]
+
+[node name="GardenAndGridGuide" type="Node2D" parent="." unique_id=1846439732]
+z_index = -10
+script = ExtResource("1_guide")
+
+[node name="Wall01" type="Sprite2D" parent="." unique_id=1229442446]
+z_index = 2
+position = Vector2(918, 371.00003)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("2_wall01")
+
+[node name="Wall02" type="Sprite2D" parent="." unique_id=830493908]
+z_index = 1
+position = Vector2(1090, 371.00003)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("3_wall02")
+
+[node name="Wall03" type="Sprite2D" parent="." unique_id=1272142230]
+position = Vector2(1255.0001, 371.00003)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("4_wall03")
+
+[node name="Wall04" type="Sprite2D" parent="." unique_id=1410299358]
+z_index = 2
+position = Vector2(918, 542.00006)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("5_wall04")
+
+[node name="Wall05" type="Sprite2D" parent="." unique_id=599481845]
+z_index = 2
+position = Vector2(1090, 542)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("6_wall05")
+
+[node name="Wall06" type="Sprite2D" parent="." unique_id=1111927407]
+z_index = 1
+position = Vector2(1255.0001, 542)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("7_wall06")
+
+[node name="Wall07" type="Sprite2D" parent="." unique_id=1049674208]
+z_index = 4
+position = Vector2(918, 716.99994)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("8_wall07")
+
+[node name="Wall08" type="Sprite2D" parent="." unique_id=1127178460]
+z_index = 3
+position = Vector2(1090, 716.99994)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("9_wall08")
+
+[node name="Wall09" type="Sprite2D" parent="." unique_id=1000456018]
+z_index = 2
+position = Vector2(1255, 716.99994)
+scale = Vector2(1.65, 1.65)
+texture = ExtResource("10_wall09")

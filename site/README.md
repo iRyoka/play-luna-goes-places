@@ -15,3 +15,12 @@ is only a non-working public-value example for local review.
 The deployed page must always be prepared from the same accepted version as the
 public repository's `main`, GitHub Release, and Web build. Do not commit generated
 Web payloads or a real deployment configuration here.
+
+`release-notes.js` holds the bilingual player-facing notes in newest-first order.
+Before publishing a new version, add its entry with the exact `version` from
+`version.txt` and short `en` and `ru` paragraph arrays. The home page shows the
+entry matching the deployed version; `changelog.html` lists all entries. Do not
+add a note for a release whose actual content has not been accepted. If a release
+uses a picture, add only approved public-safe art and a text alternative. The
+Windows URL is generated from the release manifest by `prepare_pages.ps1`; it
+must match the version shown on the page.

@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Luna Goes Places — a gentle game for young children.">
+    <meta name="description" content="Luna Goes Places is a free, ad-free game made for young children around three and a half years old.">
     <meta name="theme-color" content="#73b8d4">
     <meta property="og:title" content="Luna Goes Places">
-    <meta property="og:description" content="A gentle game for young children.">
+    <meta property="og:description" content="A free, ad-free game for young children.">
     <meta property="og:type" content="website">
     <title>Luna Goes Places</title>
     <link rel="icon" href="assets/luna-app-icon.png" type="image/png">
@@ -22,11 +22,29 @@
         <div class="paper-card">
           <img class="app-icon" src="assets/luna-app-icon.png" width="96" height="96" alt="">
           <h1 id="site-title" data-i18n="site_title">Luna Goes Places</h1>
-          <div class="actions" aria-label="Play and download" data-i18n-aria="actions_label">
-            <a id="play-link" class="button button-primary" href="play/" data-i18n="play">Play in browser</a>
-            <a id="apk-link" class="button button-secondary" href="#download" aria-describedby="download-note" data-i18n="download">Download APK</a>
+          <div class="actions" aria-label="Download and play" data-i18n-aria="actions_label">
+            <a id="apk-link" class="button button-primary" href="#download" data-i18n="download">Android · APK</a>
+            <a id="windows-link" class="button button-secondary" href="#download" data-i18n="windows" hidden>Windows x64 · ZIP</a>
+            <a id="play-link" class="button button-secondary" href="play/" data-i18n="play">Play in browser · Desktop Chrome only</a>
           </div>
           <p id="download-note" class="version-note"><span data-i18n="version">Version</span> <span id="release-version">loading</span></p>
+        </div>
+      </section>
+
+      <section class="about" aria-labelledby="about-title">
+        <div class="paper-note">
+          <h2 id="about-title" data-i18n="about_title">About the game</h2>
+          <p data-i18n="about_one">Hi! I have a daughter named Luna. We love video games and don’t like ads. So we decided to make this game free and ad-free — for everyone, forever. Luna was three and a half when we started making the game, so it’s made for children around that age.</p>
+          <p data-i18n="about_two">All the places in the game are fictional, but we’ve been to them. If you recognize any of them, it’s purely a coincidence.</p>
+        </div>
+      </section>
+
+      <section id="whats-new" class="updates" aria-labelledby="updates-title" hidden>
+        <div class="paper-note">
+          <h2 id="updates-title" data-i18n="updates_title">What’s new</h2>
+          <p class="version-note"><span data-i18n="version">Version</span> <span id="update-version"></span></p>
+          <div id="latest-note"></div>
+          <a href="changelog.html" data-i18n="full_changelog">Full changelog</a>
         </div>
       </section>
 
@@ -66,6 +84,7 @@
       <p>Luna Goes Places <span aria-hidden="true">·</span> <span id="footer-version">loading</span></p>
     </footer>
     <script src="site-config.js"></script>
+    <script src="release-notes.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

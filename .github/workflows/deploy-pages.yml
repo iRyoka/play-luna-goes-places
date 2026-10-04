@@ -42,7 +42,10 @@ jobs:
           test -f _site/index.html
           test -f "_site/play/${version}/index.html"
           test -f "_site/play/${version}/index.pck"
-          printf 'window.LunaPublicConfig = {"version":"%s","play_url":"./play/%s/","apk_url":"https://github.com/%s/releases/download/%s/luna-goes-places-%s.apk","source_url":"https://github.com/%s","license_url":"https://github.com/%s/blob/main/LICENSE.md"};\n' "${version}" "${version}" "${GITHUB_REPOSITORY}" "${version}" "${version}" "${GITHUB_REPOSITORY}" "${GITHUB_REPOSITORY}" > _site/site-config.js
+          windows_name="$(jq -er '.artifacts.windows.name' release.json)"
+          test "${windows_name}" = "luna-goes-places-windows-${version}.zip"
+          config="$(jq -cn --arg version "${version}" --arg repo "https://github.com/${GITHUB_REPOSITORY}" --arg windows "${windows_name}" '{version: $version, play_url: ("./play/" + $version + "/"), apk_url: ($repo + "/releases/download/" + $version + "/luna-goes-places-" + $version + ".apk"), windows_url: ($repo + "/releases/download/" + $version + "/" + $windows), source_url: $repo, license_url: ($repo + "/blob/main/LICENSE.md")}')"
+          printf 'window.LunaPublicConfig = %s;\n' "${config}" > _site/site-config.js
           printf 'luna.iryoka.com\n' > _site/CNAME
           touch _site/.nojekyll
 

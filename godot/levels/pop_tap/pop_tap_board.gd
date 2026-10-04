@@ -5,6 +5,7 @@ signal successful_tap(progress: int)
 signal event_triggered(progress: int)
 signal quota_completed
 signal sound_requested(sound_id: StringName)
+signal target_replenished
 
 const REFERENCE_SIZE := Vector2(2160.0, 1080.0)
 const TARGET_HIT_RADIUS := 92.0
@@ -167,6 +168,7 @@ func _process(delta: float) -> void:
 				if not _quota_emitted:
 					_recycle_target(target)
 					target.active = true
+					target_replenished.emit()
 			needs_redraw = true
 	if _finale_age >= 0.0:
 		_finale_age += delta
@@ -517,6 +519,11 @@ func _constrain_target_to_left_cap(target: BubbleTarget) -> void:
 func _consume_target(target: BubbleTarget) -> void:
 	target.active = false
 	target.pop_age = 0.0
+	# Recycling retains a target object and its visual variant. Clear any previous
+	# reaction form before assigning this tap's form so an old giant cannot turn an
+	# ordinary later tap into another giant bubble.
+	target.giant_bubble = false
+	target.chain_pop = false
 	# A child may tap a bubble while it is reacting to a previous wave. Its own pop
 	# takes over immediately; otherwise the stale wave timer postpones recycling
 	# after the pop effect and thins the field during rapid play.
@@ -536,7 +543,6 @@ func _consume_target(target: BubbleTarget) -> void:
 					earlier_target.pop_age = EVENT_EFFECT_DURATION
 			# The expanding bubble owns only its local visual space: nearby targets
 			# pop when visibly reached, but the child can keep tapping everywhere.
-			target.chain_pop = false
 		else:
 			_start_bubble_wave(target)
 		sound_requested.emit(&"pop_event")

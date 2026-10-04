@@ -30,9 +30,11 @@ body { margin: 0; min-width: 320px; }
   border-radius: 28px 23px 31px 25px;
   box-shadow: 0 14px 0 rgba(72, 105, 77, .12), 0 22px 36px rgba(58, 74, 52, .16);
   max-width: 570px;
+  min-width: 0;
   padding: clamp(1.75rem, 5vw, 3rem);
   position: relative;
   text-align: center;
+  width: 100%;
   z-index: 2;
 }
 
@@ -51,7 +53,9 @@ h1 { color: #384d7c; font-size: clamp(2.25rem, 7vw, 4.5rem); letter-spacing: -.0
 h2 { color: #384d7c; font-size: clamp(1.65rem, 4vw, 2.3rem); margin-bottom: .65rem; }
 .intro { font-size: clamp(1.1rem, 2.4vw, 1.35rem); line-height: 1.45; margin: 0 auto 1.65rem; max-width: 28rem; }
 
-.actions { display: flex; gap: .8rem; justify-content: center; }
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
+.actions .button { flex: 1 1 13rem; }
+.actions [hidden] { display: none; }
 .button { border-radius: 999px; display: inline-block; font-family: system-ui, sans-serif; font-weight: 750; padding: .9rem 1.25rem; text-decoration: none; }
 .button-primary { background: #ec785f; box-shadow: 0 4px 0 #b85546; color: #fffdf3; }
 .button-secondary { background: #f4d583; box-shadow: 0 4px 0 #c9a65f; color: #35424b; }
@@ -62,11 +66,13 @@ h2 { color: #384d7c; font-size: clamp(1.65rem, 4vw, 2.3rem); margin-bottom: .65r
 .grown-ups { align-items: center; background: #f1e4c9; display: flex; gap: 2rem; justify-content: space-between; padding: 1.7rem max(1.25rem, calc((100% - 1050px) / 2)); }
 .grown-ups h2 { font-size: 1.55rem; margin: 0; }.grown-ups .eyebrow { margin-bottom: .3rem; }
 .grown-ups nav { display: flex; flex-wrap: wrap; gap: 1rem; }.grown-ups a { color: #384d7c; font-family: system-ui, sans-serif; font-weight: 700; text-underline-offset: .2em; }
-.feedback { background: #fbf5e8; padding: 4rem 1.25rem; }.paper-note { margin: 0 auto; max-width: 640px; text-align: left; }.paper-note p { font-family: system-ui, sans-serif; line-height: 1.55; max-width: 54ch; }.issues-intro { margin-bottom: 1rem; }.issues-button { margin-bottom: 1.5rem; }
+.about, .updates, .feedback { background: #fbf5e8; padding: 3rem 1.25rem; }.updates { background: #f1e4c9; }.paper-note { margin: 0 auto; max-width: 640px; text-align: left; }.paper-note p { font-family: system-ui, sans-serif; line-height: 1.55; max-width: 54ch; }.paper-note a { color: #384d7c; font-family: system-ui, sans-serif; font-weight: 700; text-underline-offset: .2em; }.paper-note a:focus-visible, .grown-ups a:focus-visible { outline: 3px solid #384d7c; outline-offset: 3px; }.issues-intro { margin-bottom: 1rem; }.issues-button { margin-bottom: 1.5rem; }
+.updates[hidden] { display: none; }
+.changelog-page { min-height: 100svh; padding: 5rem 1.25rem 3rem; position: relative; }.changelog-card { max-width: 740px; }.changelog-card h1 { font-size: clamp(2rem, 6vw, 3.3rem); line-height: 1.1; margin-top: 2rem; }.changelog-card article { border-top: 1px solid #d7c8aa; margin-top: 2rem; padding-top: 1.5rem; }.changelog-card article h2 { font-size: 1.5rem; }
 form { display: grid; gap: .45rem; margin-top: 1.5rem; } label { font-family: system-ui, sans-serif; font-size: .94rem; font-weight: 700; margin-top: .55rem; } input, textarea { background: #fffdf5; border: 2px solid #b9a985; border-radius: 12px; color: #253b42; font: inherit; padding: .75rem; width: 100%; } textarea { resize: vertical; } input:focus, textarea:focus { border-color: #384d7c; outline: 3px solid rgba(56, 77, 124, .2); } form .button { border: 0; cursor: pointer; justify-self: start; margin-top: .8rem; }
 footer { background: #5e8063; color: #fff9eb; font-family: system-ui, sans-serif; font-size: .9rem; padding: 1.2rem; text-align: center; } footer p { margin: 0; }
 
 @media (max-width: 600px) {
   .journey { align-items: flex-start; min-height: 640px; padding-top: 5.25rem; }.language-switch { right: 1rem; top: 1rem; }
-  .actions, .grown-ups { align-items: stretch; flex-direction: column; }.button { text-align: center; }.grown-ups { gap: 1.2rem; }.grown-ups nav { flex-direction: column; gap: .8rem; }
+  .actions, .grown-ups { align-items: stretch; flex-direction: column; }.actions .button { flex: none; width: 100%; }.button { text-align: center; }.grown-ups { gap: 1.2rem; }.grown-ups nav { flex-direction: column; gap: .8rem; }
 }

@@ -2,10 +2,14 @@ extends Control
 
 const SETTINGS_MODAL_SCENE := preload("res://app/settings_modal.tscn")
 const CHAPTER_SELECTION_SCENE := preload("res://app/chapter_selection.tscn")
+const CHAPTER_02_MAP_MUSIC: AudioStreamOggVorbis = preload("res://assets/audio/music/chapter-02/map_welcome_to_the_item_shop.ogg")
+const CHAPTER_02_GAMEPLAY_MUSIC: AudioStreamOggVorbis = preload("res://assets/audio/music/chapter-02/gameplay_overworld_alt.ogg")
 
 @onready var content: Control = %Content
 @onready var map_music: AudioStreamPlayer = %MapMusic
 @onready var gameplay_music: AudioStreamPlayer = %GameplayMusic
+@onready var _default_map_stream: AudioStream = map_music.stream
+@onready var _default_gameplay_stream: AudioStream = gameplay_music.stream
 @onready var sfx_player: SfxPlayer = %SfxPlayer
 
 var _active_chapter_id: StringName = &""
@@ -22,6 +26,7 @@ func _ready() -> void:
 	_apply_music_enabled(bool(game_state.get("music_enabled")))
 	_apply_sound_effects_enabled(bool(game_state.get("sound_effects_enabled")))
 	if _get_content_registry() != null:
+		_recover_saved_position()
 		show_chapter(_get_cold_start_chapter_id())
 
 
@@ -63,7 +68,7 @@ func show_chapter(chapter_id: StringName = _active_chapter_id) -> void:
 	chapter_map.location_selected.connect(_on_location_selected)
 	chapter_map.chapter_selection_requested.connect(_on_chapter_selection_requested)
 	chapter_map.settings_requested.connect(open_settings)
-	_play_music(map_music)
+	_play_music(map_music, CHAPTER_02_MAP_MUSIC if chapter_id == &"chapter_02" else _default_map_stream)
 
 
 func show_chapter_selection() -> void:
@@ -81,7 +86,7 @@ func show_chapter_selection() -> void:
 	_set_screen(selection)
 	selection.sound_requested.connect(sfx_player.play_sound)
 	selection.chapter_selected.connect(_on_chapter_selected)
-	_play_music(map_music)
+	_play_music(map_music, _default_map_stream)
 
 
 func open_level(level_id: StringName) -> void:
@@ -110,7 +115,7 @@ func open_level(level_id: StringName) -> void:
 	level.continue_to_chapter_requested.connect(show_chapter)
 	level.sound_requested.connect(sfx_player.play_sound)
 	_set_screen(level)
-	_play_music(gameplay_music)
+	_play_music(gameplay_music, CHAPTER_02_GAMEPLAY_MUSIC if level_definition.chapter_id == &"chapter_02" else _default_gameplay_stream)
 
 
 func replay_current_level() -> void:
@@ -191,6 +196,26 @@ func _load_scene(scene_path: String, label: String) -> PackedScene:
 	return scene
 
 
+func _recover_saved_position() -> void:
+	var registry := _get_content_registry()
+	var game_state := get_node("/root/GameState")
+	var saved_id := game_state.last_played_level_id as StringName
+	if saved_id.is_empty() or not registry.is_valid():
+		return
+	# Resolve content only after registry validation; storage remains ID-based.
+	var chapter_id := StringName(String(saved_id).get_slice("/", 0))
+	var chapter := registry.get_chapter(chapter_id)
+	if chapter == null or not _is_chapter_available(chapter):
+		chapter = registry.get_chapter(registry.get_first_chapter_id())
+	var completed_ids: Dictionary[StringName, bool] = {}
+	for level_id: StringName in chapter.level_ids:
+		if game_state.is_level_completed(level_id):
+			completed_ids[level_id] = true
+	var recovered_id := ProgressionEvaluator.get_resume_level_id(chapter, completed_ids, saved_id)
+	if not recovered_id.is_empty() and recovered_id != saved_id:
+		game_state.set_last_played_level_id(recovered_id)
+
+
 func _get_cold_start_chapter_id() -> StringName:
 	var content_registry := _get_content_registry()
 	if content_registry == null:
@@ -256,6 +281,8 @@ func _set_bus_enabled(bus_name: StringName, enabled: bool) -> void:
 
 
 func _configure_music_loops() -> void:
+	_configure_ogg_loop(CHAPTER_02_MAP_MUSIC)
+	_configure_ogg_loop(CHAPTER_02_GAMEPLAY_MUSIC)
 	var map_stream := map_music.stream as AudioStreamOggVorbis
 	if map_stream == null:
 		push_error("Map music must use an Ogg Vorbis stream.")
@@ -272,10 +299,18 @@ func _configure_music_loops() -> void:
 		gameplay_stream.loop_end = int(gameplay_stream.get_length() * gameplay_stream.mix_rate)
 
 
-func _play_music(next_player: AudioStreamPlayer) -> void:
-	if _active_music_player == next_player and next_player.playing:
+func _configure_ogg_loop(stream: AudioStreamOggVorbis) -> void:
+	stream.loop = true
+	stream.loop_offset = 0.0
+
+
+func _play_music(next_player: AudioStreamPlayer, next_stream: AudioStream) -> void:
+	if _active_music_player == next_player and next_player.stream == next_stream and next_player.playing:
 		return
 	if _active_music_player != null:
 		_active_music_player.stop()
 	_active_music_player = next_player
+	next_player.stream = next_stream
+	# The approved alternate is 12.7 dB quieter in RMS than Chapter 1 gameplay.
+	next_player.volume_db = -5.3 if next_stream == CHAPTER_02_GAMEPLAY_MUSIC else -18.0
 	next_player.play()

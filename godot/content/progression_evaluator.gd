@@ -16,6 +16,21 @@ static func get_available_level_ids(
 	return available_level_ids
 
 
+## Keep a playable saved position; otherwise prefer unfinished available content.
+static func get_resume_level_id(
+	chapter: ChapterDefinition,
+	completed_level_ids: Dictionary[StringName, bool],
+	last_played_level_id: StringName,
+) -> StringName:
+	var available_ids := get_available_level_ids(chapter, completed_level_ids)
+	if available_ids.has(last_played_level_id):
+		return last_played_level_id
+	for level_id: StringName in available_ids:
+		if not completed_level_ids.has(level_id):
+			return level_id
+	return available_ids[0] if not available_ids.is_empty() else &""
+
+
 static func is_chapter_available(
 	chapter: ChapterDefinition,
 	completed_level_ids: Dictionary[StringName, bool],

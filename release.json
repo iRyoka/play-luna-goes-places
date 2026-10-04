@@ -1,21 +1,26 @@
 {
-    "version":  "0.4.0",
-    "source_tag":  "0.4.0",
-    "source_commit":  "3c4b4d077e51e72633186dfddb6b425f3ba4d571",
-    "template_commit":  "3c4b4d077e51e72633186dfddb6b425f3ba4d571",
-    "android_version_code":  4000,
-    "artifacts":  {
-                      "apk":  {
-                                  "name":  "luna-goes-places-0.4.0.apk",
-                                  "sha256":  "60136f7e94d8e744af53dc7b1aa60fca6d77d280cd616ee1c4a60508e95efd7a",
-                                  "bytes":  144030981
-                              },
-                      "web":  {
-                                  "name":  "luna-goes-places-web-0.4.0.zip",
-                                  "sha256":  "6b6a4c2bfb124609a86f43bb5162d04916b99f5684b3f0049793a5ed03b86500",
-                                  "bytes":  125969035
-                              }
-                  },
-    "signing_certificate_sha256":  "e2065b37ef62557a765288b6e53c1d8e9c66a4538bbecef76beaa472a36b29ca",
-    "public_commit":  null
+    "version": "0.5.0",
+    "source_tag": "0.5.0",
+    "source_commit": "2510b6b81c99b931fce5d0cceab6cc48d1ee4839",
+    "template_commit": "99ef979e8cc129c4092371462e64a292ffb6dfa7",
+    "android_version_code": 5000,
+    "artifacts": {
+        "apk": {
+            "name": "luna-goes-places-0.5.0.apk",
+            "sha256": "ec7360b2c307e624352becf47faa7d0213b96e16cdd6907112b2b033fa99cc18",
+            "bytes": 174963137
+        },
+        "web": {
+            "name": "luna-goes-places-web-0.5.0.zip",
+            "sha256": "9e3472e7a8ca5d546894b344d9448825bc6f158cd7a75bca1606132643b2ed60",
+            "bytes": 156577321
+        },
+        "windows": {
+            "name": "luna-goes-places-windows-0.5.0.zip",
+            "sha256": "11d86dc996612772d9f968efd1300187fefce7d93609fcbc35b5e0d7cd6273d7",
+            "bytes": 184437518
+        }
+    },
+    "signing_certificate_sha256": "e2065b37ef62557a765288b6e53c1d8e9c66a4538bbecef76beaa472a36b29ca",
+    "public_commit": null
 }

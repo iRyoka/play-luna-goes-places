@@ -127,6 +127,7 @@ func set_active_segment(index: int) -> void:
 ## away. The two runs share their endpoint, so the actor remains exactly where
 ## the child left it while the active recovery checkpoint changes.
 func continue_through_checkpoint(index: int) -> void:
+	_accept_checkpoint(_current_segment())
 	_segment_index = index
 	_distance = 0.0
 	_lateral = 0.0
@@ -439,9 +440,6 @@ func _apply_target(segment: TrailSegment, target: Vector2) -> void:
 		if outside and _exit_armed:
 			_restart_segment()
 			return
-		if stage.ant_journey != null and not outside:
-			stage.ant_journey.passed_distance = maxf(stage.ant_journey.passed_distance,segment.global_start_distance+candidate)
-			_record_checkpoint_passes(stage.ant_journey)
 		_exit_armed = _exit_armed or not outside
 		_off_route = outside
 	else:
@@ -476,6 +474,18 @@ func _resolve_segment(segment: TrailSegment) -> void:
 	_start_settle(segment.get_length(), 0.0, ARRIVAL_GLIDE_SECONDS)
 	queue_redraw()
 	segment_completed.emit(_segment_index)
+
+
+## Checkpoint presentation is committed only when the board accepts the segment.
+## Grace can keep an Ant moving near a straw edge, but it must not pre-visit a
+## berry while the stricter support check still rejects the checkpoint.
+func _accept_checkpoint(segment: TrailSegment) -> void:
+	var stage := _current_stage()
+	if stage == null or stage.ant_journey == null or segment == null:
+		return
+	var journey := stage.ant_journey
+	journey.passed_distance = maxf(journey.passed_distance, segment.global_start_distance + segment.get_length())
+	_record_checkpoint_passes(journey)
 
 
 ## Leaving a restarting corridor sends the actor back to this segment's start,

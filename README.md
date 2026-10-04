@@ -23,6 +23,8 @@ and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 ## Play and download
 
 The version currently recommended for play is available from the project's public
-landing page. Its browser build, APK link, source, and notices all point to the
-same versioned GitHub Release. The landing-page source lives in [site/](site/);
-generated Web files and APKs are release artifacts and are not committed here.
+landing page. Its browser build, APK, Windows ZIP, source, and notices all point to
+the same versioned GitHub Release. The Windows ZIP contains a runnable
+`luna-goes-places.exe` with embedded game data and the required notices. The
+landing-page source lives in [site/](site/); generated release artifacts are not
+committed here.

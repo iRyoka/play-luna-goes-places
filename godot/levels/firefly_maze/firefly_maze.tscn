@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://levels/firefly_maze/firefly_maze.gd" id="1_level"]
+[ext_resource type="Script" path="res://levels/firefly_maze/firefly_maze_board.gd" id="2_board"]
+[ext_resource type="Script" path="res://shared/navigation/back_button.gd" id="3_back"]
+[ext_resource type="PackedScene" path="res://shared/completion/completion_overlay.tscn" id="4_completion"]
+
+[node name="FireflyMazeLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_level")
+level_id = &"chapter_02/firefly_maze"
+
+[node name="Gameplay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FireflyMazeBoard" type="Control" parent="Gameplay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_board")
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 32.0
+offset_top = 64.0
+offset_right = 212.0
+offset_bottom = 244.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+flat = true
+script = ExtResource("3_back")
+
+[node name="CompletionOverlay" parent="." instance=ExtResource("4_completion")]

@@ -120,6 +120,7 @@ func _layout_markers() -> void:
 		var definition := _get_content_registry().get_level(level_id)
 		if definition != null:
 			_marker_nodes[level_id].position = _get_layout_size() * (marker_slots[definition.map_marker_id] as Vector2)
+			_layout_marker_tap_target(_marker_nodes[level_id])
 	_layout_chapter_exit()
 	_layout_presented_luna()
 
@@ -151,11 +152,20 @@ func _present_last_played_luna() -> void:
 		return
 	var game_state := get_node("/root/GameState")
 	var last_played_level_id := game_state.last_played_level_id as StringName
-	_presented_luna_level_id = last_played_level_id if _marker_nodes.has(last_played_level_id) else _chapter.level_ids[0]
+	var completed_ids: Dictionary[StringName, bool] = {}
+	for level_id: StringName in _chapter.level_ids:
+		if game_state.is_level_completed(level_id):
+			completed_ids[level_id] = true
+	_presented_luna_level_id = ProgressionEvaluator.get_resume_level_id(_chapter, completed_ids, last_played_level_id)
 	_luna_random.seed = Time.get_ticks_usec()
 	var selected_index := _luna_random.randi_range(0, LUNA_INDICATOR_NAMES.size() - 1)
 	var selected_indicator_name := LUNA_INDICATOR_NAMES[selected_index]
-	if selected_indicator_name == _last_luna_indicator_name:
+	var definition := _get_content_registry().get_level(_presented_luna_level_id)
+	# This authored left-edge slot has room only for the above-button pose.
+	var needs_peeking_pose := chapter_id == &"chapter_02" and definition.map_marker_id == &"MountainFalls"
+	if needs_peeking_pose:
+		selected_indicator_name = &"LunaIndicatorPeeking"
+	elif selected_indicator_name == _last_luna_indicator_name:
 		selected_index = (selected_index + _luna_random.randi_range(1, LUNA_INDICATOR_NAMES.size() - 1)) % LUNA_INDICATOR_NAMES.size()
 		selected_indicator_name = LUNA_INDICATOR_NAMES[selected_index]
 	_last_luna_indicator_name = selected_indicator_name
@@ -192,10 +202,21 @@ func _set_marker_tap_target(level_id: StringName, is_available: bool) -> void:
 		collision.shape = shape
 		target.add_child(collision)
 		marker.add_child(target)
+		_layout_marker_tap_target(marker)
 		target.feedback_requested.connect(_on_target_feedback_requested)
 		target.activated.connect(_on_target_activated)
 	elif target != null:
 		target.input_pickable = is_available
+
+
+func _layout_marker_tap_target(marker: Node2D) -> void:
+	var target := marker.get_node_or_null("TapTarget") as TapTarget
+	if target == null:
+		return
+	# Edge slots keep their authored artwork position and full-size touch circle.
+	var layout_size := _get_layout_size()
+	var center := marker.position.clamp(Vector2.ONE * MARKER_RADIUS, layout_size - Vector2.ONE * MARKER_RADIUS)
+	target.position = center - marker.position
 
 
 func _update_route_segments(available_ids: Array[StringName]) -> void:
